@@ -1,0 +1,6 @@
+@reserva_butacas_HostAddress = http://localhost:5090
+
+GET {{reserva_butacas_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
