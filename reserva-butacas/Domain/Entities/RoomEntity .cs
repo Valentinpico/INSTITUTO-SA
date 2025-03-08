@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace reserva_butacas.Domain.Entities
 {
-    public class RoomEntity
+    public class RoomEntity : BaseEntity
     {
         [Required]
         [MaxLength(50)]

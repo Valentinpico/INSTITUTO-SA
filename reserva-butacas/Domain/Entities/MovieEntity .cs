@@ -7,7 +7,7 @@ using reserva_butacas.Domain.Enums;
 
 namespace reserva_butacas.Domain.Entities
 {
-    public class MovieEntity
+    public class MovieEntity : BaseEntity
     {
         [Required]
         [MaxLength(100)]

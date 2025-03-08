@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace reserva_butacas.Domain.Entities
 {
-    public class SeatEntity
+    public class SeatEntity : BaseEntity
     {
         [Required]
         public short Number { get; set; }
@@ -15,8 +15,8 @@ namespace reserva_butacas.Domain.Entities
         [Required]
         public short RowNumber { get; set; }
 
-        [ForeignKey("Room")]
-        public int RoomId { get; set; }
-        public RoomEntity Room { get; set; }
+        public int RoomID { get; set; }
+        [ForeignKey("RoomID")]
+        public virtual required RoomEntity Room { get; set; }
     }
 }
