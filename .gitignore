@@ -1,0 +1,32 @@
+# Ignora archivos de compilación y ejecución
+bin/
+obj/
+
+# Ignora archivos de usuario específicos
+*.user
+*.suo
+*.userprefs
+
+# Ignora archivos de configuración local
+appsettings.Development.json
+
+# Ignora archivos de paquetes NuGet
+packages/
+
+# Ignora archivos de salida de pruebas
+TestResults/
+
+# Ignora archivos de logs
+*.log
+
+# Ignora archivos de VS Code
+.vscode/
+
+# Ignora archivos de Rider
+.idea/
+
+# Ignora archivos de macOS
+.DS_Store
+
+# Ignora archivos de Node.js (si usas Node.js en tu proyecto)
+node_modules/
