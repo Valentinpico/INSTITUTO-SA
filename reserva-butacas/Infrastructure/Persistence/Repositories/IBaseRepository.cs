@@ -8,7 +8,7 @@ namespace reserva_butacas.Infrastructure.Persistence.Repositories
     public interface IBaseRepository<TEntity> where TEntity : class
     {
         Task<IEnumerable<TEntity>> GetAllAsync();
-        Task<TEntity> GetByIdAsync(int id);
+        Task<TEntity?> GetByIdAsync(int id);
         Task<IEnumerable<TEntity>> SearchAsync(System.Linq.Expressions.Expression<Func<TEntity, bool>> predicate);
         Task AddAsync(TEntity entity);
         Task AddListAsync(IEnumerable<TEntity> entities);
@@ -17,6 +17,7 @@ namespace reserva_butacas.Infrastructure.Persistence.Repositories
         Task DeleteListAsync(IEnumerable<TEntity> entities);
         Task<bool> ExistsSearchAsync(System.Linq.Expressions.Expression<Func<TEntity, bool>> predicate);
         Task<int> CountAsync();
+        Task Save();
     }
 
 }

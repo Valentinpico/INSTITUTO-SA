@@ -7,14 +7,9 @@ using reserva_butacas.Infrastructure.Api;
 
 namespace reserva_butacas.Domain.Exeptions
 {
-    public class CustomExceptionHandler : IExceptionHandler
+    public class CustomExceptionHandler(ILogger<CustomExceptionHandler> logger) : IExceptionHandler
     {
-        private readonly ILogger<CustomExceptionHandler> _logger;
-
-        public CustomExceptionHandler(ILogger<CustomExceptionHandler> logger)
-        {
-            _logger = logger;
-        }
+        private readonly ILogger<CustomExceptionHandler> _logger = logger;
 
         public async ValueTask<bool> TryHandleAsync(
             HttpContext httpContext,
@@ -26,7 +21,6 @@ namespace reserva_butacas.Domain.Exeptions
             var apiResponse = exception switch
             {
                 CustomException customException => CreateErrorResponse(customException),
-                // Puedes manejar otros tipos de excepciones aquí
                 _ => CreateUnexpectedErrorResponse(exception)
             };
 

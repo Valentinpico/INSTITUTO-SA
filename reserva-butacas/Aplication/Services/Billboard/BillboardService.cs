@@ -8,14 +8,8 @@ using reserva_butacas.Infrastructure.Persistence.Repositories.Billboard;
 
 namespace reserva_butacas.Aplication.Services.Billboard
 {
-    public class BillboardService : BaseService<BillboardEntity>, IBillboardService
+    public class BillboardService(IBillboardRepository billboardRepository) : BaseService<BillboardEntity>(billboardRepository), IBillboardService
     {
-        protected readonly IBillboardRepository _billboardRepository;
-        public BillboardService(IBillboardRepository billboardRepository)
-            : base(billboardRepository)
-        {
-            _billboardRepository = billboardRepository;
-        }
-
+        protected readonly IBillboardRepository _billboardRepository = billboardRepository;
     }
 }

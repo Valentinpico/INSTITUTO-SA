@@ -1,32 +1,19 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace reserva_butacas.Domain.Entities
+namespace reserva_butacas.Aplication.DTOs.Customer
 {
-    public class CustomerEntity : BaseEntity
+    public class CustomerDTO
     {
-        [Required]
-        [MaxLength(20)]
+        public int Id { get; set; }
+        public bool Status { get; set; }
         public required string DocumentNumber { get; set; }
-
-        [Required]
-        [MaxLength(30)]
         public required string Name { get; set; }
-
-        [Required]
-        [MaxLength(30)]
         public required string Lastname { get; set; }
-
-        [Required]
         public short Age { get; set; }
-
-        [MaxLength(20)]
         public required string PhoneNumber { get; set; }
-
-        [MaxLength(100)]
         public required string Email { get; set; }
     }
 }

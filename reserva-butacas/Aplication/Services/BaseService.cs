@@ -8,15 +8,10 @@ using reserva_butacas.Infrastructure.Persistence.Repositories.Billboard;
 
 namespace reserva_butacas.Aplication.Services
 {
-    public abstract class BaseService<TEntity> : IBaseService<TEntity> where TEntity : class
+    public abstract class BaseService<TEntity>(IBaseRepository<TEntity> repository) : IBaseService<TEntity> where TEntity : class
     {
 
-        private readonly IBaseRepository<TEntity> _repository;
-
-        public BaseService(IBaseRepository<TEntity> repository)
-        {
-            _repository = repository;
-        }
+        private readonly IBaseRepository<TEntity> _repository = repository;
 
         public Task AddAsync(TEntity entity)
         {
@@ -53,7 +48,7 @@ namespace reserva_butacas.Aplication.Services
             return _repository.GetAllAsync();
         }
 
-        public Task<TEntity> GetByIdAsync(int id)
+        public Task<TEntity?> GetByIdAsync(int id)
         {
             return _repository.GetByIdAsync(id);
         }

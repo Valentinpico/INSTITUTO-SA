@@ -73,5 +73,10 @@ namespace reserva_butacas.Infrastructure.Persistence.Repositories
         {
             return await _dbSet.CountAsync();
         }
+
+        public async Task Save()
+        {
+            await _context.SaveChangesAsync();
+        }
     }
 }

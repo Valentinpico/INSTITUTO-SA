@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using reserva_butacas.Aplication.Services.Billboard;
 using reserva_butacas.Domain.Entities;
+using reserva_butacas.Domain.Exeptions;
 
-namespace reserva_butacas.Controllers
+namespace reserva_butacas.Infrastructure.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -16,29 +17,22 @@ namespace reserva_butacas.Controllers
         private readonly IBillboardService _billboardService = billboardService;
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BillboardEntity>>> GetAll()
+        public async Task<ActionResult<ApiResponse<IEnumerable<BillboardEntity>>>> GetAll()
         {
             var billboards = await _billboardService.GetAllAsync();
 
-            if (billboards == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(billboards);
+            return Ok(
+                ApiResponse<IEnumerable<BillboardEntity>>.SuccessResponse(billboards, "Billboards lista")
+            );
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<BillboardEntity>> GetById(int id)
         {
-            var billboard = await _billboardService.GetByIdAsync(id);
+            var billboard = await _billboardService.GetByIdAsync(id)
+            ?? throw new NotFoundException($"Cliente con ID {id} no encontrado");
 
-            if (billboard == null)
-            {
-                return NotFound(new { message = "Billboard not found" });
-            }
-
-            return Ok(billboard);
+            return Ok(ApiResponse<BillboardEntity>.SuccessResponse(billboard, "Billboard encontrado"));
         }
 
     }
