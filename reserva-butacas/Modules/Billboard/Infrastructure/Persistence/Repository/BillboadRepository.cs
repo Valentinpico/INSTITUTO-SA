@@ -10,13 +10,11 @@ using reserva_butacas.Modules.Billboard.Domain.Entities;
 
 namespace reserva_butacas.Modules.Billboard.Infrastructure.Persistence.Repository
 {
-    public class BillboardRepository : BaseRepository<BillboardEntity>, IBillboardRepository
+    public class BillboardRepository(AppDbContext context) : BaseRepository<BillboardEntity>(context), IBillboardRepository
     {
-
-
-        public BillboardRepository(AppDbContext context) : base(context)
+        public Task<BillboardEntity> GetByIdWithDetailsAsync(int id)
         {
+            throw new NotImplementedException();
         }
-
     }
 }

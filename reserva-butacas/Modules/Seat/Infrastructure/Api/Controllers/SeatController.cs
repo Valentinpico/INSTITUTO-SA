@@ -19,6 +19,15 @@ namespace reserva_butacas.Modules.Seat.Infrastructure.Api.Controllers
         private readonly IMapper _mapper = mapper;
         private readonly ISeatService _seatService = seatService;
 
+        [HttpPost("cancel")]
+        public async Task<IActionResult> CancelSeatAndBooking(SeatCancellationDTO dto)
+        {
+            await _seatService.CancelSeatAndBookingAsync(dto);
+            return Ok(
+                ApiResponse<object>.SuccessResponse(null, "Seat and booking canceled successfully")
+            );
+        }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SeatDTO>>> Get()
         {

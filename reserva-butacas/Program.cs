@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using reserva_butacas.Domain.AutoMappers;
 using reserva_butacas.Domain.Exeptions;
+using reserva_butacas.Domain.Ports;
 using reserva_butacas.Infrastructure.Persistence;
 using reserva_butacas.Modules.Billboard.Aplication.Services;
 using reserva_butacas.Modules.Billboard.Infrastructure.Persistence.Repository;
@@ -12,6 +14,8 @@ using reserva_butacas.Modules.Movie.Aplication.Services;
 using reserva_butacas.Modules.Movie.Infrastructure.Persistence.Repository;
 using reserva_butacas.Modules.Room.Aplication.Services;
 using reserva_butacas.Modules.Room.Infrastructure.Persistence.Repository;
+using reserva_butacas.Modules.Seat.Aplication.Services;
+using reserva_butacas.Modules.Seat.Infrastructure.Persistence.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,9 +36,13 @@ builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 //Room
 builder.Services.AddScoped<IRoomService, RoomService>();
 builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+//Seat
+builder.Services.AddScoped<ISeatService, SeatService>();
+builder.Services.AddScoped<ISeatRepository, SeatRepository>();
 
 
-
+// Example in Program.cs or Startup.cs
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -79,8 +87,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseExceptionHandler();
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 
+//app.UseExceptionHandler();
 
 app.UseAuthorization();
 

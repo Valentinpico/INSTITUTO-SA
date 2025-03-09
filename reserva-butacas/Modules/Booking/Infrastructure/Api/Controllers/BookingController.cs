@@ -9,15 +9,36 @@ using reserva_butacas.Infrastructure.Api;
 using reserva_butacas.Modules.Booking.Aplication.DTOs;
 using reserva_butacas.Modules.Booking.Aplication.Services;
 using reserva_butacas.Modules.Booking.Domain.Entities;
+using reserva_butacas.Modules.Booking.Infrastructure.Persistence.Repository;
 
 namespace reserva_butacas.Modules.Booking.Infrastructure.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class BookingController(IBookingService bookingService, IMapper mapper) : ControllerBase
+    public class BookingController(
+        IBookingService bookingService,
+        IMapper mapper,
+        IBookingRepository bookingRepository
+    ) : ControllerBase
     {
         protected readonly IBookingService _bookingService = bookingService;
         private readonly IMapper _mapper = mapper;
+        private readonly IBookingRepository _bookingRepository = bookingRepository;
+
+
+
+
+        [HttpGet("horror")]
+        public async Task<IActionResult> GetHorrorMovieBookings([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        {
+            var bookings = await _bookingRepository.GetHorrorMovieBookingsInDateRange(startDate, endDate);
+
+            var bookingsFound = bookings.Select(_mapper.Map<BookingDTO>);
+            return Ok(
+                ApiResponse<IEnumerable<BookingDTO>>.SuccessResponse(bookingsFound, "Bookings retrieved successfully")
+            );
+        }
+
 
 
         [HttpGet]

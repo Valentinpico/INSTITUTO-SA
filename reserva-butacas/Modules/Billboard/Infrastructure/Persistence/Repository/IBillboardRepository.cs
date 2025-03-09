@@ -9,6 +9,7 @@ namespace reserva_butacas.Modules.Billboard.Infrastructure.Persistence.Repositor
 {
     public interface IBillboardRepository : IBaseRepository<BillboardEntity>
     {
-
+        Task<BillboardEntity> GetByIdWithDetailsAsync(int id);
+        new Task UpdateAsync(BillboardEntity billboard);
     }
 }

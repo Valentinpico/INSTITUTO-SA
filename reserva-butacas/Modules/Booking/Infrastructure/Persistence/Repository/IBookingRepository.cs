@@ -11,5 +11,9 @@ namespace reserva_butacas.Modules.Booking.Infrastructure.Persistence.Repository
     public interface IBookingRepository : IBaseRepository<BookingEntity>
     {
 
+        Task<IEnumerable<BookingEntity>> GetHorrorMovieBookingsInDateRange(DateTime startDate, DateTime endDate);
+
+        new Task<BookingEntity> GetByIdAsync(int id);
+        new Task UpdateAsync(BookingEntity booking);
     }
 }

@@ -10,6 +10,8 @@ namespace reserva_butacas.Modules.Seat.Infrastructure.Persistence.Repository
 {
     public interface ISeatRepository : IBaseRepository<SeatEntity>
     {
-
+        Task<Dictionary<int, (int Available, int Occupied)>> GetSeatAvailabilityByRoomForToday();
+        new Task<SeatEntity> GetByIdAsync(int id);
+        new Task UpdateAsync(SeatEntity seat);
     }
 }
