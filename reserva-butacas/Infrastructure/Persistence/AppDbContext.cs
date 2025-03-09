@@ -4,6 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using reserva_butacas.Domain.Entities;
+using reserva_butacas.Modules.Billboard.Domain.Entities;
+using reserva_butacas.Modules.Booking.Domain.Entities;
+using reserva_butacas.Modules.Customer.Domain.Entities;
+using reserva_butacas.Modules.Movie.Domain.Entities;
+using reserva_butacas.Modules.Room.Domain.Entities;
+using reserva_butacas.Modules.Seat.Domain.Entities;
 
 namespace reserva_butacas.Infrastructure.Persistence
 {

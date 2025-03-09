@@ -1,13 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using reserva_butacas.Aplication.Services;
-using reserva_butacas.Aplication.Services.Billboard;
-using reserva_butacas.Aplication.Services.Customer;
 using reserva_butacas.Domain.AutoMappers;
-using reserva_butacas.Domain.Entities;
 using reserva_butacas.Domain.Exeptions;
 using reserva_butacas.Infrastructure.Persistence;
-using reserva_butacas.Infrastructure.Persistence.Repositories;
-using reserva_butacas.Infrastructure.Persistence.Repositories.Billboard;
+using reserva_butacas.Modules.Billboard.Aplication.Services;
+using reserva_butacas.Modules.Billboard.Infrastructure.Persistence.Repository;
+using reserva_butacas.Modules.Customer.Aplication.Services;
+using reserva_butacas.Modules.Customer.Infrastructure.Persistence.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
