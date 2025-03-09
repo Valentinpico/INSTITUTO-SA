@@ -3,29 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.DataProtection.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace reserva_butacas.Infrastructure.Persistence.Repositories
 {
-    public abstract class BaseRepository<TEntity> where TEntity : class
+    public abstract class BaseRepository<TEntity>(AppDbContext context) : IBaseRepository<TEntity> where TEntity : class
     {
-        protected readonly DbContext _context;
-        protected readonly DbSet<TEntity> _dbSet;
-
-        public BaseRepository(DbContext context)
-        {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
-            _dbSet = _context.Set<TEntity>();
-        }
+        protected readonly AppDbContext _context = context;
+        protected readonly DbSet<TEntity> _dbSet = context.Set<TEntity>();
 
         public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
         {
             return await _dbSet.ToListAsync();
         }
 
-        public virtual async Task<TEntity> GetByIdAsync(int id)
+        public virtual async Task<TEntity?> GetByIdAsync(int id)
         {
-            return await _dbSet.FindAsync(id) ?? throw new KeyNotFoundException($"No se encontró el registro con ID {id}");
+            return await _dbSet.FindAsync(id) ?? null;
         }
 
         public virtual async Task<IEnumerable<TEntity>> SearchAsync(Expression<Func<TEntity, bool>> predicate)

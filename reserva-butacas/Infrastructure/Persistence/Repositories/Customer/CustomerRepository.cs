@@ -7,7 +7,7 @@ using reserva_butacas.Domain.Entities;
 
 namespace reserva_butacas.Infrastructure.Persistence.Repositories.Billboard
 {
-    public class BillboadRepository(DbContext context) : BaseRepository<BillboardEntity>(context), IBillboardRepository
+    public class CustomerRepository(AppDbContext context) : BaseRepository<CustomerEntity>(context), ICustomerRepository
     {
     }
 }
