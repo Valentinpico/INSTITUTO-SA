@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using AutoMapper;
 using reserva_butacas.Infrastructure.Persistence.Repositories;
-using reserva_butacas.Infrastructure.Persistence.Repositories.Billboard;
 
 namespace reserva_butacas.Aplication.Services
 {
@@ -12,7 +12,6 @@ namespace reserva_butacas.Aplication.Services
     {
 
         private readonly IBaseRepository<TEntity> _repository = repository;
-
         public Task AddAsync(TEntity entity)
         {
             return _repository.AddAsync(entity);

@@ -4,8 +4,14 @@ using reserva_butacas.Domain.Exeptions;
 using reserva_butacas.Infrastructure.Persistence;
 using reserva_butacas.Modules.Billboard.Aplication.Services;
 using reserva_butacas.Modules.Billboard.Infrastructure.Persistence.Repository;
+using reserva_butacas.Modules.Booking.Aplication.Services;
+using reserva_butacas.Modules.Booking.Infrastructure.Persistence.Repository;
 using reserva_butacas.Modules.Customer.Aplication.Services;
 using reserva_butacas.Modules.Customer.Infrastructure.Persistence.Repository;
+using reserva_butacas.Modules.Movie.Aplication.Services;
+using reserva_butacas.Modules.Movie.Infrastructure.Persistence.Repository;
+using reserva_butacas.Modules.Room.Aplication.Services;
+using reserva_butacas.Modules.Room.Infrastructure.Persistence.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,10 +20,19 @@ var builder = WebApplication.CreateBuilder(args);
 //Billboard
 builder.Services.AddScoped<IBillboardService, BillboardService>();
 builder.Services.AddScoped<IBillboardRepository, BillboardRepository>();
-
+//booking
+builder.Services.AddScoped<IBookingService, BookingService>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 //Customer
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+//Movie
+builder.Services.AddScoped<IMovieService, MovieService>();
+builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+//Room
+builder.Services.AddScoped<IRoomService, RoomService>();
+builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+
 
 
 

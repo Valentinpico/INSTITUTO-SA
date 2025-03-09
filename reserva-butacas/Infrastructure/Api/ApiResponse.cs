@@ -21,7 +21,7 @@ namespace reserva_butacas.Infrastructure.Api
         public int StatusCode { get; set; }
 
         // Constructor para respuesta exitosa
-        public static ApiResponse<T> SuccessResponse(T data, string message = "Operation completed successfully")
+        public static ApiResponse<T> SuccessResponse(T? data, string message = "Operation completed successfully")
         {
             return new ApiResponse<T>
             {

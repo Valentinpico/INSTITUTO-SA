@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using reserva_butacas.Aplication.Services;
 using reserva_butacas.Domain.Entities;
 using reserva_butacas.Domain.Exeptions;
+using reserva_butacas.Modules.Customer.Aplication.DTOs;
 using reserva_butacas.Modules.Customer.Domain.Entities;
 using reserva_butacas.Modules.Customer.Infrastructure.Persistence.Repository;
 
