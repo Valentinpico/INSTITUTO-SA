@@ -19,8 +19,6 @@ namespace reserva_butacas.Infrastructure.Api.Controllers
         private readonly ICustomerService _customerService = customerService;
         private readonly IMapper _mapper = mapper;
 
-
-
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CustomerDTO>>> GetAll()
         {
