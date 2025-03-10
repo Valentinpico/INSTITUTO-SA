@@ -4,10 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using reserva_butacas.Infrastructure.Persistence;
-using reserva_butacas.Modules.Billboard.Infrastructure.Persistence.Repository;
-using reserva_butacas.Modules.Room.Infrastructure.Persistence.Repository;
 using reserva_butacas.Modules.Seat.Infrastructure.Persistence.Repository;
-using reserva_butacas.test.Integration.Booking;
 using Xunit;
 
 namespace reserva_butacas.test.Integration.Room
