@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using FluentValidation.Validators;
 using reserva_butacas.Aplication.Services;
 using reserva_butacas.Domain.Entities;
 using reserva_butacas.Domain.Exeptions;
@@ -20,12 +22,21 @@ namespace reserva_butacas.Modules.Billboard.Aplication.Services
         IBillboardRepository billboardRepository,
         IBookingRepository bookingRepository,
         ISeatRepository seatRepository,
-        IUnitOfWork unitOfWork) : BaseService<BillboardEntity>(billboardRepository), IBillboardService
+        IMapper mapper,
+        IUnitOfWork unitOfWork) : IBillboardService
     {
         private readonly IBillboardRepository _billboardRepository = billboardRepository;
         private readonly IBookingRepository _bookingRepository = bookingRepository;
         private readonly ISeatRepository _seatRepository = seatRepository;
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
+        private readonly IMapper _mapper = mapper;
+
+        public async Task AddAsync(BillboardCreateDTO entity)
+        {
+            var billboard = _mapper.Map<BillboardEntity>(entity);
+
+            await _billboardRepository.AddAsync(billboard);
+        }
 
         public async Task<IEnumerable<CustomerEntity>> CancelBillboardAndBookingsAsync(BillboardCancellationDTO dto)
         {
@@ -85,6 +96,62 @@ namespace reserva_butacas.Modules.Billboard.Aplication.Services
         {
             throw new NotImplementedException();
         }
+
+        public Task DeleteAsync(int id)
+        {
+            var billboard = _billboardRepository.GetByIdAsync(id)
+                ?? throw new NotFoundException($"Billboard with ID {id} not found");
+
+            return _billboardRepository.DeleteAsync(id);
+
+
+        }
+
+        public async Task<IEnumerable<BillboardDTO>> GetAllAsync()
+        {
+
+            var billboards = await _billboardRepository.GetAllAsync();
+
+            var billboardsDTO = billboards.Select(b => _mapper.Map<BillboardDTO>(b));
+
+            billboardsDTO = billboardsDTO.Where(b => b.Status == true);
+
+            return billboardsDTO ?? [];
+        }
+
+        public async Task<BillboardDTO> GetByIdAsync(int id)
+        {
+            var billboard = await _billboardRepository.GetByIdAsync(id)
+                ?? throw new NotFoundException($"Billboard with ID {id} not found");
+
+            if (billboard.Status == false)
+                throw new NotFoundException($"Billboard with ID {id} is not active");
+
+            var billboardDTO = _mapper.Map<BillboardDTO>(billboard);
+
+            return billboardDTO;
+        }
+
+        public async Task<IEnumerable<BillboardDTO>> SearchAsync(Func<BillboardEntity, bool> predicate)
+        {
+            var billboards = await _billboardRepository.SearchAsync(predicate);
+
+            var billboardsDTO = billboards.Select(b => _mapper.Map<BillboardDTO>(b));
+
+            billboardsDTO = billboardsDTO.Where(b => b.Status);
+
+            return billboardsDTO ?? [];
+        }
+
+
+        public async Task UpdateAsync(BillboardDTO entity)
+        {
+            var billboard = await _billboardRepository.GetByIdAsync(entity.Id)
+                ?? throw new NotFoundException($"Billboard with ID {entity.Id} not found in order to update");
+
+            await _billboardRepository.UpdateAsync(billboard);
+        }
+
 
     }
 }

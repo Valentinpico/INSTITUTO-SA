@@ -11,11 +11,11 @@ using reserva_butacas.Modules.Seat.Aplication.DTOs;
 
 namespace reserva_butacas.Modules.Billboard.Aplication.Services
 {
-    public interface IBillboardService : IBaseService<BillboardEntity>
+    public interface IBillboardService : IBaseService<BillboardEntity, BillboardDTO, BillboardCreateDTO>
     {
         Task<IEnumerable<CustomerEntity>> CancelBillboardAndBookingsAsync(BillboardCancellationDTO dto);
-        Task CancelSeatAndBookingAsync(SeatCancellationDTO dto);
 
+        Task CancelSeatAndBookingAsync(SeatCancellationDTO dto);
 
     }
 }

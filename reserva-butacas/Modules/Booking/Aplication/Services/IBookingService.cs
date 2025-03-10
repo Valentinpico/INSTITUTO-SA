@@ -8,12 +8,8 @@ using reserva_butacas.Modules.Booking.Domain.Entities;
 
 namespace reserva_butacas.Modules.Booking.Aplication.Services
 {
-    public interface IBookingService : IBaseService<BookingEntity>
+    public interface IBookingService : IBaseService<BookingEntity, BookingDTO, BookingCreateDTO>
     {
-
-        new Task AddAsync(BookingEntity entity);
-
-        new Task<IEnumerable<BookingEntity>> GetAllAsync();
 
 
     }

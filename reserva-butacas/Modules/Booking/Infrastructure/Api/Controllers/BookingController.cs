@@ -46,48 +46,38 @@ namespace reserva_butacas.Modules.Booking.Infrastructure.Api.Controllers
         {
             var result = await _bookingService.GetAllAsync();
 
-            var bookingsFound = result.Select(_mapper.Map<BookingDTO>);
-
             return Ok(
-                ApiResponse<IEnumerable<BookingDTO>>.SuccessResponse(bookingsFound, "Bookings retrieved successfully")
+                ApiResponse<IEnumerable<BookingDTO>>.SuccessResponse(result, "Bookings retrieved successfully")
             );
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var result = await _bookingService.GetByIdAsync(id) ?? throw new NotFoundException($"Booking with ID {id} not found");
-
-            var bookingFound = _mapper.Map<BookingDTO>(result);
+            var result = await _bookingService.GetByIdAsync(id);
 
             return Ok(
-                ApiResponse<BookingDTO>.SuccessResponse(_mapper.Map<BookingDTO>(bookingFound), "Booking retrieved successfully")
+                ApiResponse<BookingDTO>.SuccessResponse(_mapper.Map<BookingDTO>(result), "Booking retrieved successfully")
             );
         }
 
         [HttpPost]
         public async Task<IActionResult> Post(BookingCreateDTO bookingCreateDTO)
         {
-            var booking = _mapper.Map<BookingEntity>(bookingCreateDTO);
-            await _bookingService.AddAsync(booking);
+            await _bookingService.AddAsync(bookingCreateDTO);
 
-            var bookingCreated = _mapper.Map<BookingDTO>(booking);
             return Ok(
-                  ApiResponse<BookingDTO>.SuccessResponse(bookingCreated, "Customer created successfully")
+                  ApiResponse<BookingDTO>.SuccessResponse(null, "Customer created successfully")
             );
         }
 
         [HttpPut]
         public async Task<IActionResult> Put(BookingDTO bookingDTO)
         {
-            var booking = _mapper.Map<BookingEntity>(bookingDTO);
-
-            await _bookingService.UpdateAsync(booking);
-
-            var bookingUpdated = _mapper.Map<BookingDTO>(booking);
+            await _bookingService.UpdateAsync(bookingDTO);
 
             return Ok(
-                  ApiResponse<BookingDTO>.SuccessResponse(bookingUpdated, "Customer created successfully")
+                  ApiResponse<BookingDTO>.SuccessResponse(null, "Customer created successfully")
             );
         }
 
@@ -95,6 +85,7 @@ namespace reserva_butacas.Modules.Booking.Infrastructure.Api.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             await _bookingService.DeleteAsync(id);
+
             return Ok(
                     ApiResponse<BookingDTO>.SuccessResponse(null, "Customer created successfully")
             );

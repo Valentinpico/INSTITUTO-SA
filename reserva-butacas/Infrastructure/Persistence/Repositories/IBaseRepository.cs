@@ -9,15 +9,10 @@ namespace reserva_butacas.Infrastructure.Persistence.Repositories
     {
         Task<IEnumerable<TEntity>> GetAllAsync();
         Task<TEntity?> GetByIdAsync(int id);
-        Task<IEnumerable<TEntity>> SearchAsync(System.Linq.Expressions.Expression<Func<TEntity, bool>> predicate);
+        Task<IEnumerable<TEntity>> SearchAsync(Func<TEntity, bool> predicate);
         Task AddAsync(TEntity entity);
-        Task AddListAsync(IEnumerable<TEntity> entities);
         Task UpdateAsync(TEntity entity);
         Task DeleteAsync(int id);
-        Task DeleteListAsync(IEnumerable<TEntity> entities);
-        Task<bool> ExistsSearchAsync(System.Linq.Expressions.Expression<Func<TEntity, bool>> predicate);
-        Task<int> CountAsync();
-        Task Save();
     }
 
 }
