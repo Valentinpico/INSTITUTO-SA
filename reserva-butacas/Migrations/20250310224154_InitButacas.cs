@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace reserva_butacas.Migrations
 {
     /// <inheritdoc />
-    public partial class initbutacas : Migration
+    public partial class InitButacas : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

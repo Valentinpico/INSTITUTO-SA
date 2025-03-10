@@ -14,9 +14,8 @@ namespace reserva_butacas.Modules.Seat.Infrastructure.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class SeatController(IMapper mapper, ISeatService seatService) : ControllerBase
+    public class SeatController(ISeatService seatService) : ControllerBase
     {
-        private readonly IMapper _mapper = mapper;
         private readonly ISeatService _seatService = seatService;
 
         [HttpPost("cancel")]
@@ -33,21 +32,18 @@ namespace reserva_butacas.Modules.Seat.Infrastructure.Api.Controllers
         {
             var seats = await _seatService.GetAllAsync();
 
-            var seatsDTO = _mapper.Map<IEnumerable<SeatDTO>>(seats);
             return Ok(
-                ApiResponse<IEnumerable<SeatDTO>>.SuccessResponse(seatsDTO, "Seats listed successfully")
+                ApiResponse<IEnumerable<SeatDTO>>.SuccessResponse(seats, "Seats listed successfully")
             );
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var seat = await _seatService.GetByIdAsync(id)
-            ?? throw new NotFoundException("Seat not found");
+            var seat = await _seatService.GetByIdAsync(id);
 
-            var seatDTO = _mapper.Map<SeatDTO>(seat);
             return Ok(
-                ApiResponse<SeatDTO>.SuccessResponse(seatDTO, "Seat listed successfully")
+                ApiResponse<SeatDTO>.SuccessResponse(seat, "Seat listed successfully")
             );
 
         }
@@ -55,28 +51,20 @@ namespace reserva_butacas.Modules.Seat.Infrastructure.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(SeatCreateDTO seatCreateDTO)
         {
-            var seat = _mapper.Map<SeatEntity>(seatCreateDTO);
-
-            await _seatService.AddAsync(seat);
-
-            var seatDTO = _mapper.Map<SeatDTO>(seat);
+            await _seatService.AddAsync(seatCreateDTO);
 
             return Ok(
-                ApiResponse<SeatDTO>.SuccessResponse(seatDTO, "Seat created successfully")
+                ApiResponse<SeatDTO>.SuccessResponse(null, "Seat created successfully")
             );
         }
 
         [HttpPut]
         public async Task<ActionResult<ApiResponse<SeatDTO>>> Put(SeatDTO seatEntity)
         {
-            var seat = _mapper.Map<SeatEntity>(seatEntity);
-
-            await _seatService.UpdateAsync(seat);
-
-            var seatDTO = _mapper.Map<SeatDTO>(seat);
+            await _seatService.UpdateAsync(seatEntity);
 
             return Ok(
-                ApiResponse<SeatDTO>.SuccessResponse(seatDTO, "Seat updated successfully")
+                ApiResponse<SeatDTO>.SuccessResponse(null, "Seat updated successfully")
             );
         }
 

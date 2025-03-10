@@ -10,7 +10,7 @@ namespace reserva_butacas.Domain.Ports
     public class UnitOfWork(AppDbContext context) : IUnitOfWork
     {
         private readonly AppDbContext _context = context;
-        private IDbContextTransaction _transaction;
+        private IDbContextTransaction _transaction = null!;
 
         public async Task BeginTransactionAsync()
         {

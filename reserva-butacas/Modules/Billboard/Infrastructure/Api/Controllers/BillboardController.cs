@@ -17,12 +17,10 @@ namespace reserva_butacas.Modules.Billboard.Infrastructure.Api.Controllers
     [Route("api/[controller]")]
     public class BillboardController(
         IBillboardService billboardService,
-        IMapper mapper,
         ISeatRepository seatRepository) : ControllerBase
     {
 
         private readonly IBillboardService _billboardService = billboardService;
-        private readonly IMapper _mapper = mapper;
         private readonly ISeatRepository _seatRepository = seatRepository;
 
 
@@ -55,7 +53,9 @@ namespace reserva_butacas.Modules.Billboard.Infrastructure.Api.Controllers
         public async Task<IActionResult> GetSeatsAvailabilityForToday()
         {
             var result = await _seatRepository.GetSeatAvailabilityByRoomForToday();
-            return Ok(result);
+            return Ok(
+                ApiResponse<object>.SuccessResponse(result, "Seats availability for today")
+            );
         }
 
         [HttpGet]
@@ -80,16 +80,12 @@ namespace reserva_butacas.Modules.Billboard.Infrastructure.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<BillboardDTO>> Create(BillboardCreateDTO billboardCreateDTO)
         {
-            if (!ModelState.IsValid)
-            {
-                throw new BadRequestException("Datos invalidos");
-            }
+
 
             await _billboardService.AddAsync(billboardCreateDTO);
 
-            var billboardDTO = _mapper.Map<BillboardDTO>(billboardCreateDTO);
 
-            return Ok(ApiResponse<BillboardDTO>.SuccessResponse(billboardDTO, "Billboard creado"));
+            return Ok(ApiResponse<BillboardDTO>.SuccessResponse(null, "Billboard creado"));
         }
 
         [HttpPut]

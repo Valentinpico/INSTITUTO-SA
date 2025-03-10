@@ -21,7 +21,7 @@ namespace reserva_butacas.test
         public DbContextFixture()
         {
             var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseInMemoryDatabase("TestCinemaDb")
+                .UseInMemoryDatabase($"TestDatabase_{Guid.NewGuid()}")
                 .Options;
 
             Context = new AppDbContext(options);

@@ -12,8 +12,8 @@ using reserva_butacas.Infrastructure.Persistence;
 namespace reserva_butacas.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250309215253_enum-validate")]
-    partial class enumvalidate
+    [Migration("20250310224154_InitButacas")]
+    partial class InitButacas
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

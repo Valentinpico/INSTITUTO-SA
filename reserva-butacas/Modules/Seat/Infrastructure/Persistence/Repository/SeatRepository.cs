@@ -24,7 +24,7 @@ namespace reserva_butacas.Modules.Seat.Infrastructure.Persistence.Repository
             foreach (var room in rooms)
             {
                 var totalSeats = await _context.Seats
-                    .Where(s => s.RoomID == room.Id )
+                    .Where(s => s.RoomID == room.Id && s.Status)
                     .CountAsync();
 
                 var billboards = await _context.Billboards
@@ -45,7 +45,9 @@ namespace reserva_butacas.Modules.Seat.Infrastructure.Persistence.Repository
                 {
                     RoomID = room.Id,
                     Available = availableSeats,
-                    Occupied = occupiedSeats
+                    Occupied = occupiedSeats,
+                    Total = totalSeats
+
                 });
             }
 

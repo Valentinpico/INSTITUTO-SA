@@ -8,7 +8,7 @@ using reserva_butacas.Modules.Seat.Domain.Entities;
 
 namespace reserva_butacas.Modules.Seat.Aplication.Services
 {
-    public interface ISeatService : IBaseService<SeatEntity>
+    public interface ISeatService : IBaseService<SeatEntity, SeatDTO, SeatCreateDTO>
     {
         Task CancelSeatAndBookingAsync(SeatCancellationDTO dto);
     }
