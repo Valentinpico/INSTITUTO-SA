@@ -26,69 +26,48 @@ namespace reserva_butacas.Modules.Customer.Infrastructure.Api.Controllers
         {
             var customers = await _customerService.GetAllAsync() ?? [];
 
-            var customersFound = customers.Select(_mapper.Map<CustomerDTO>);
-
             return Ok(
-                ApiResponse<IEnumerable<CustomerDTO>>.SuccessResponse(customersFound, "Customers retrieved successfully")
+                ApiResponse<IEnumerable<CustomerDTO>>.SuccessResponse(customers, "Customers retrieved successfully")
             );
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<CustomerDTO>> GetById(int id)
         {
-            var customer = await _customerService.GetByIdAsync(id)
-                        ?? throw new NotFoundException($"Customer with ID {id} not found");
-
-            var customerFound = _mapper.Map<CustomerDTO>(customer);
+            var customer = await _customerService.GetByIdAsync(id);
 
             return Ok(
-                ApiResponse<CustomerDTO>.SuccessResponse(customerFound, "Customer retrieved successfully")
+                ApiResponse<CustomerDTO>.SuccessResponse(customer, "Customer retrieved successfully")
             );
         }
 
         [HttpPost]
         public async Task<ActionResult<CustomerDTO>> Create(CustomerCreateDTO createCustomerDTO)
         {
-            var customer = _mapper.Map<CustomerEntity>(createCustomerDTO);
-
-            await _customerService.AddAsync(customer);
-
-            var customerCreated = _mapper.Map<CustomerDTO>(customer);
+            await _customerService.AddAsync(createCustomerDTO);
 
             return Ok(
-                ApiResponse<CustomerDTO>.SuccessResponse(customerCreated, "Customer created successfully")
+                ApiResponse<CustomerDTO>.SuccessResponse(null, "Customer created successfully")
             );
         }
 
         [HttpPut]
-        public async Task<ActionResult<CustomerDTO>> Update(CustomerUpdateDTO updateCustomerDTO)
+        public async Task<ActionResult<CustomerDTO>> Update(CustomerDTO updateCustomerDTO)
         {
-            var customer = await _customerService.GetByIdAsync(updateCustomerDTO.Id)
-                        ?? throw new NotFoundException($"Customer with ID {updateCustomerDTO.Id} not found");
-
-            _mapper.Map(updateCustomerDTO, customer);
-
-            await _customerService.UpdateAsync(customer);
-
-            var customerUpdated = _mapper.Map<CustomerDTO>(customer);
+            await _customerService.UpdateAsync(updateCustomerDTO);
 
             return Ok(
-                ApiResponse<CustomerDTO>.SuccessResponse(customerUpdated, "Customer updated successfully")
+                ApiResponse<CustomerDTO>.SuccessResponse(null, "Customer updated successfully")
             );
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<CustomerDTO>> Delete(int id)
         {
-            var customer = await _customerService.GetByIdAsync(id)
-                        ?? throw new NotFoundException($"Customer with ID {id} not found");
-
-            await _customerService.DeleteAsync(customer.Id);
-
-            var customerDeleted = _mapper.Map<CustomerDTO>(customer);
+            await _customerService.DeleteAsync(id);
 
             return Ok(
-                ApiResponse<CustomerDTO>.SuccessResponse(customerDeleted, "Customer deleted successfully")
+                ApiResponse<CustomerDTO>.SuccessResponse(null, "Customer deleted successfully")
             );
 
         }
