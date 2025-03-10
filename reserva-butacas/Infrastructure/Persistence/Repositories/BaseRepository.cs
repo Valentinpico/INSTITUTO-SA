@@ -71,6 +71,7 @@ namespace reserva_butacas.Infrastructure.Persistence.Repositories
 
         public virtual async Task<int> CountAsync()
         {
+
             return await _dbSet.CountAsync();
         }
 

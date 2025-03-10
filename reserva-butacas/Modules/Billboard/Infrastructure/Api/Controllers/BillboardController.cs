@@ -29,15 +29,15 @@ namespace reserva_butacas.Modules.Billboard.Infrastructure.Api.Controllers
         private readonly ISeatRepository _seatRepository = seatRepository;
 
 
-        // b1. Endpoint para cancelar butaca y reserva
         [HttpPost("cancel-seat")]
         public async Task<IActionResult> CancelSeatAndBooking(SeatCancellationDTO dto)
         {
             await _billboardService.CancelSeatAndBookingAsync(dto);
-            return Ok(new { Message = "Seat and booking cancelled successfully" });
+            return Ok(
+                ApiResponse<object>.SuccessResponse(null, "Seat and booking canceled successfully")
+            );
         }
 
-        // b2. Endpoint para cancelar cartelera y todas las reservas
         [HttpPost("cancel")]
         public async Task<IActionResult> CancelBillboard(BillboardCancellationDTO dto)
         {
@@ -54,7 +54,6 @@ namespace reserva_butacas.Modules.Billboard.Infrastructure.Api.Controllers
             });
         }
 
-        // e. Endpoint para obtener butacas disponibles y ocupadas
         [HttpGet("seats-availability/today")]
         public async Task<IActionResult> GetSeatsAvailabilityForToday()
         {
@@ -63,7 +62,7 @@ namespace reserva_butacas.Modules.Billboard.Infrastructure.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ApiResponse<IEnumerable<BillboardEntity>>>> GetAll()
+        public async Task<ActionResult<ApiResponse<IEnumerable<BillboardDTO>>>> GetAll()
         {
             var billboards = await _billboardService.GetAllAsync();
 
@@ -73,7 +72,7 @@ namespace reserva_butacas.Modules.Billboard.Infrastructure.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<BillboardEntity>> GetById(int id)
+        public async Task<ActionResult<BillboardDTO>> GetById(int id)
         {
             var billboard = await _billboardService.GetByIdAsync(id)
             ?? throw new NotFoundException($"Cliente con ID {id} no encontrado");
@@ -82,8 +81,14 @@ namespace reserva_butacas.Modules.Billboard.Infrastructure.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<BillboardEntity>> Create(BillboardCreateDTO billboardCreateDTO)
+        public async Task<ActionResult<BillboardDTO>> Create(BillboardCreateDTO billboardCreateDTO)
         {
+
+            if (!ModelState.IsValid)
+            {
+                throw new BadRequestException("Datos invalidos");
+            }
+
             var billboardCreate = _mapper.Map<BillboardEntity>(billboardCreateDTO);
 
             await _billboardService.AddAsync(billboardCreate);
@@ -94,7 +99,7 @@ namespace reserva_butacas.Modules.Billboard.Infrastructure.Api.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<BillboardEntity>> Update(BillboardEntity billboard)
+        public async Task<ActionResult<BillboardDTO>> Update(BillboardDTO billboard)
         {
             var billboardFind = await _billboardService.GetByIdAsync(billboard.Id)
             ?? throw new NotFoundException($"Cliente con ID {billboard.Id} no encontrado");

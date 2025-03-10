@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("reserva-butacas")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4d0b79aa10aef6fed1c2536b9de17faee3affc87")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+346ec6b57e6e9113e50ecbe277b44780a70dc253")]
 [assembly: System.Reflection.AssemblyProductAttribute("reserva-butacas")]
 [assembly: System.Reflection.AssemblyTitleAttribute("reserva-butacas")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

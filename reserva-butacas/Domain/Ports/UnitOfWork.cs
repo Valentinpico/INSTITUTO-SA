@@ -2,24 +2,41 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using reserva_butacas.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace reserva_butacas.Domain.Ports
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork(AppDbContext context) : IUnitOfWork
     {
-        public Task BeginTransactionAsync()
+        private readonly AppDbContext _context = context;
+        private IDbContextTransaction _transaction;
+
+        public async Task BeginTransactionAsync()
         {
-            throw new NotImplementedException();
+            _transaction = await _context.Database.BeginTransactionAsync();
         }
 
-        public Task CommitAsync()
+        public async Task CommitAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _context.SaveChangesAsync();
+                await _transaction.CommitAsync();
+            }
+            catch
+            {
+                await RollbackAsync();
+                throw;
+            }
         }
 
-        public Task RollbackAsync()
+        public async Task RollbackAsync()
         {
-            throw new NotImplementedException();
+            if (_transaction != null)
+            {
+                await _transaction.RollbackAsync();
+            }
         }
     }
 }

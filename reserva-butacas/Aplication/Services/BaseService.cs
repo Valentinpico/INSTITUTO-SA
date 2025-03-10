@@ -25,6 +25,7 @@ namespace reserva_butacas.Aplication.Services
         public Task<int> CountAsync()
         {
             return _repository.CountAsync();
+
         }
 
         public Task DeleteAsync(int id)

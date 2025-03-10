@@ -42,7 +42,7 @@ namespace reserva_butacas.Modules.Booking.Infrastructure.Api.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<ActionResult<IEnumerable<BookingDTO>>> Get()
         {
             var result = await _bookingService.GetAllAsync();
 
@@ -70,6 +70,7 @@ namespace reserva_butacas.Modules.Booking.Infrastructure.Api.Controllers
         {
             var booking = _mapper.Map<BookingEntity>(bookingCreateDTO);
             await _bookingService.AddAsync(booking);
+
             var bookingCreated = _mapper.Map<BookingDTO>(booking);
             return Ok(
                   ApiResponse<BookingDTO>.SuccessResponse(bookingCreated, "Customer created successfully")

@@ -27,7 +27,7 @@ namespace reserva_butacas.Modules.Billboard.Aplication.Services
         private readonly ISeatRepository _seatRepository = seatRepository;
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
-        public async Task<List<CustomerEntity>> CancelBillboardAndBookingsAsync(BillboardCancellationDTO dto)
+        public async Task<IEnumerable<CustomerEntity>> CancelBillboardAndBookingsAsync(BillboardCancellationDTO dto)
         {
             var affectedCustomers = new List<CustomerEntity>();
 
@@ -35,18 +35,18 @@ namespace reserva_butacas.Modules.Billboard.Aplication.Services
             {
                 await _unitOfWork.BeginTransactionAsync();
 
-                var billboard = await _billboardRepository.GetByIdWithDetailsAsync(dto.BillboardId)
-                    ?? throw new KeyNotFoundException($"Billboard with ID {dto.BillboardId} not found");
+                var billboard = await _billboardRepository.GetByIdAsync(dto.BillboardId)
+                    ?? throw new NotFoundException($"Billboard with ID {dto.BillboardId} not found");
 
                 if (billboard.Date.Date < DateTime.Today)
-                    throw new CartelleraCancelacionException("No se puede cancelar funciones de la cartelera con fecha anterior a la actual");
+                    throw new BadRequestException("No se puede cancelar funciones de la cartelera con fecha anterior a la actual");
 
                 billboard.Status = false;
                 await _billboardRepository.UpdateAsync(billboard);
 
                 var bookings = await _bookingRepository.SearchAsync(b => b.BillboardID == dto.BillboardId);
                 if (bookings == null || !bookings.Any())
-                    throw new KeyNotFoundException($"No bookings found for Billboard with ID {dto.BillboardId}");
+                    throw new NotFoundException($"No bookings found for Billboard with ID {dto.BillboardId}");
 
                 foreach (var booking in bookings)
                 {
@@ -66,7 +66,6 @@ namespace reserva_butacas.Modules.Billboard.Aplication.Services
 
                 await _unitOfWork.CommitAsync();
 
-                // Imprimir por consola la lista de clientes afectados
                 Console.WriteLine("Clientes afectados por cancelación de cartelera:");
                 foreach (var customer in affectedCustomers)
                 {
@@ -87,9 +86,5 @@ namespace reserva_butacas.Modules.Billboard.Aplication.Services
             throw new NotImplementedException();
         }
 
-        Task<IEnumerable<CustomerEntity>> IBillboardService.CancelBillboardAndBookingsAsync(BillboardCancellationDTO dto)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

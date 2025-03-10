@@ -11,5 +11,10 @@ namespace reserva_butacas.Modules.Booking.Aplication.Services
     public interface IBookingService : IBaseService<BookingEntity>
     {
 
+        new Task AddAsync(BookingEntity entity);
+
+        new Task<IEnumerable<BookingEntity>> GetAllAsync();
+
+
     }
 }

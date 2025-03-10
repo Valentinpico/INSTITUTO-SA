@@ -67,9 +67,9 @@ namespace reserva_butacas.Modules.Seat.Infrastructure.Api.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put(SeatEntity seatEntity)
+        public async Task<ActionResult<ApiResponse<SeatDTO>>> Put(SeatDTO seatEntity)
         {
-            var seat = _mapper.Map<SeatEntity>(seatEntity.Id);
+            var seat = _mapper.Map<SeatEntity>(seatEntity);
 
             await _seatService.UpdateAsync(seat);
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using reserva_butacas.Aplication.Services;
+using reserva_butacas.Domain.Exeptions;
 using reserva_butacas.Domain.Ports;
 using reserva_butacas.Modules.Booking.Infrastructure.Persistence.Repository;
 using reserva_butacas.Modules.Seat.Aplication.DTOs;
@@ -28,14 +29,13 @@ namespace reserva_butacas.Modules.Seat.Aplication.Services
                 await _unitOfWork.BeginTransactionAsync();
 
                 var seat = await _seatRepository.GetByIdAsync(dto.SeatId)
-                    ?? throw new KeyNotFoundException($"Seat with ID {dto.SeatId} not found");
-
+                    ?? throw new NotFoundException($"Seat with ID {dto.SeatId} not found");
 
                 seat.Status = false;
                 await _seatRepository.UpdateAsync(seat);
 
                 var booking = await _bookingRepository.GetByIdAsync(dto.BookingId)
-                    ?? throw new KeyNotFoundException($"Booking with ID {dto.BookingId} not found");
+                    ?? throw new NotFoundException($"Booking with ID {dto.BookingId} not found");
 
                 booking.Status = false;
                 await _bookingRepository.UpdateAsync(booking);
