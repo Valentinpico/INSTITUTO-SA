@@ -14,9 +14,8 @@ namespace reserva_butacas.Modules.Room.Infrastructure.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class RoomController(IMapper mapper, IRoomService roomService) : ControllerBase
+    public class RoomController(IRoomService roomService) : ControllerBase
     {
-        private readonly IMapper _mapper = mapper;
         private readonly IRoomService _roomService = roomService;
 
         [HttpGet]
@@ -24,37 +23,28 @@ namespace reserva_butacas.Modules.Room.Infrastructure.Api.Controllers
         {
             var rooms = await _roomService.GetAllAsync();
 
-            var roomsDTO = _mapper.Map<List<RoomDTO>>(rooms);
-
             return Ok(
-                ApiResponse<IEnumerable<RoomDTO>>.SuccessResponse(roomsDTO)
+                ApiResponse<IEnumerable<RoomDTO>>.SuccessResponse(rooms, "Rooms listed")
             );
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<RoomDTO>> GetRoomById(int id)
         {
-            var room = await _roomService.GetByIdAsync(id)
-                        ?? throw new NotFoundException($"Room with ID {id} not found");
-
-            var roomDTO = _mapper.Map<RoomDTO>(room);
+            var room = await _roomService.GetByIdAsync(id);
 
             return Ok(
-                ApiResponse<RoomDTO>.SuccessResponse(roomDTO)
+                ApiResponse<RoomDTO>.SuccessResponse(room, "Room found")
             );
         }
 
         [HttpPost]
         public async Task<ActionResult<RoomDTO>> CreateRoom(RoomCreatedDTO createRoomDTO)
         {
-            var roomEntity = _mapper.Map<RoomEntity>(createRoomDTO);
-
-            await _roomService.AddAsync(roomEntity);
-
-            var roomCreated = _mapper.Map<RoomDTO>(roomEntity);
+            await _roomService.AddAsync(createRoomDTO);
 
             return Ok(
-                ApiResponse<RoomDTO>.SuccessResponse(roomCreated)
+                ApiResponse<RoomDTO>.SuccessResponse(null, "Room created")
             );
 
 
@@ -63,24 +53,17 @@ namespace reserva_butacas.Modules.Room.Infrastructure.Api.Controllers
         [HttpPut]
         public async Task<ActionResult<RoomDTO>> UpdateRoom(RoomDTO roomDTO)
         {
-            var roomEntity = _mapper.Map<RoomEntity>(roomDTO);
-
-            await _roomService.UpdateAsync(roomEntity);
-
-            var roomUpdated = _mapper.Map<RoomDTO>(roomEntity);
+            await _roomService.UpdateAsync(roomDTO);
 
             return Ok(
-                ApiResponse<RoomDTO>.SuccessResponse(roomUpdated)
+                ApiResponse<RoomDTO>.SuccessResponse(null, "Room updated")
             );
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<ApiResponse<string>>> DeleteRoom(int id)
         {
-            var room = await _roomService.GetByIdAsync(id)
-                        ?? throw new NotFoundException($"Room with ID {id} not found");
-
-            await _roomService.DeleteAsync(room.Id);
+            await _roomService.DeleteAsync(id);
 
             return Ok(
                 ApiResponse<string>.SuccessResponse("Room deleted")
