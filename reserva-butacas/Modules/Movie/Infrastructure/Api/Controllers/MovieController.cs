@@ -25,54 +25,36 @@ namespace reserva_butacas.Modules.Movie.Infrastructure.Api.Controllers
         {
             var movies = await _movieService.GetAllAsync();
 
-            var moviesDTO = _mapper.Map<List<MovieDTO>>(movies);
-
-            return Ok(
-                ApiResponse<IEnumerable<MovieDTO>>.SuccessResponse(moviesDTO)
-            );
+            return Ok(ApiResponse<IEnumerable<MovieDTO>>.SuccessResponse(movies));
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<MovieDTO>> GetMovieById(int id)
         {
-            var movie = await _movieService.GetByIdAsync(id)
-                        ?? throw new NotFoundException($"Movie with ID {id} not found");
-
-            var movieDTO = _mapper.Map<MovieDTO>(movie);
+            var movie = await _movieService.GetByIdAsync(id);
 
             return Ok(
-                ApiResponse<MovieDTO>.SuccessResponse(movieDTO)
+                ApiResponse<MovieDTO>.SuccessResponse(movie)
             );
         }
 
         [HttpPost]
         public async Task<ActionResult<MovieDTO>> CreateMovie(MovieCreatedDTO createMovieDTO)
         {
-
-
-            var movieEntity = _mapper.Map<MovieEntity>(createMovieDTO);
-
-            await _movieService.AddAsync(movieEntity);
-
-            var movieCreated = _mapper.Map<MovieDTO>(movieEntity);
+            await _movieService.AddAsync(createMovieDTO);
 
             return Ok(
-                ApiResponse<MovieDTO>.SuccessResponse(movieCreated)
+                ApiResponse<MovieDTO>.SuccessResponse(null, "Movie created successfully")
             );
         }
 
         [HttpPut]
         public async Task<ActionResult<MovieDTO>> UpdateMovie(MovieDTO movieDTO)
         {
-            var movie = await _movieService.GetByIdAsync(movieDTO.Id)
-                        ?? throw new NotFoundException($"Movie with ID {movieDTO.Id} not found");
-
-            _mapper.Map(movieDTO, movie);
-
-            await _movieService.UpdateAsync(movie);
+            await _movieService.UpdateAsync(movieDTO);
 
             return Ok(
-                ApiResponse<MovieDTO>.SuccessResponse(movieDTO)
+                ApiResponse<MovieDTO>.SuccessResponse(movieDTO, "Movie updated successfully")
             );
         }
 
@@ -80,13 +62,10 @@ namespace reserva_butacas.Modules.Movie.Infrastructure.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<MovieDTO>> DeleteMovie(int id)
         {
-            var movie = await _movieService.GetByIdAsync(id)
-                        ?? throw new NotFoundException($"Movie with ID {id} not found");
-
             await _movieService.DeleteAsync(id);
 
             return Ok(
-                ApiResponse<MovieDTO>.SuccessResponse(null)
+                ApiResponse<MovieDTO>.SuccessResponse(null, "Movie deleted successfully")
             );
 
         }

@@ -18,7 +18,7 @@ namespace reserva_butacas.Modules.Seat.Domain.Entities
         public short RowNumber { get; set; }
 
         public int RoomID { get; set; }
-        
+
         [ForeignKey("RoomID")]
         public virtual required RoomEntity Room { get; set; }
     }
