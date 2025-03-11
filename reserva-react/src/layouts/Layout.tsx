@@ -1,5 +1,5 @@
 import { Link, Outlet } from "react-router-dom";
-import { columsNav } from "../common/utils/contanst";
+import { columsNav } from "../utils/contanst";
 
 export const Layout = () => {
   return (
