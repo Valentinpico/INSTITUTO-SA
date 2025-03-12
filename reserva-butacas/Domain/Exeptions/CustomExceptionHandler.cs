@@ -42,9 +42,9 @@ namespace reserva_butacas.Domain.Exeptions
 
         private ApiResponse<object> CreateUnexpectedErrorResponse(Exception exception)
         {
-            _logger.LogError(exception, "Unexpected error occurred");
+            _logger.LogError(exception, "Unexpected error occurred: {Message}", exception.Message);
 
-            var error = new ErrorModel { PropertyName = string.Empty, ErrorMessage = "An unexpected error occurred" };
+            var error = new ErrorModel { PropertyName = "An unexpected error occurred", ErrorMessage = exception.Message };
 
             return ApiResponse<object>.ErrorResponse(
                 [error],

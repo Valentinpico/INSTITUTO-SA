@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace reserva_butacas.Domain.Entities
 {
-    public class BaseEntity
+    public class BaseEntity : IBaseEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

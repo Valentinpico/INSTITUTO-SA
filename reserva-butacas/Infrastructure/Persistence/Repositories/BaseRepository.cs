@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.DataProtection.Repositories;
 using Microsoft.EntityFrameworkCore;
+using reserva_butacas.Domain.Entities;
 
 namespace reserva_butacas.Infrastructure.Persistence.Repositories
 {
@@ -30,10 +31,20 @@ namespace reserva_butacas.Infrastructure.Persistence.Repositories
             await _dbSet.AddAsync(entity);
             await _context.SaveChangesAsync();
         }
+
         public virtual async Task UpdateAsync(TEntity entity)
         {
+            var existingEntity = _context.ChangeTracker.Entries<TEntity>()
+                                  .FirstOrDefault(e => e.Entity is IBaseEntity baseEntity && baseEntity.Id == ((IBaseEntity)entity).Id);
+
+            if (existingEntity != null)
+            {
+                _context.Entry(existingEntity.Entity).State = EntityState.Detached;
+            }
+
             _dbSet.Attach(entity);
             _context.Entry(entity).State = EntityState.Modified;
+
             await _context.SaveChangesAsync();
         }
         public virtual async Task DeleteAsync(int id)

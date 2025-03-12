@@ -1,73 +1,211 @@
 // src/components/SimpleForm.tsx
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Calendar } from "@/components/ui/calendar";
+  Customer,
+  CustomerCreate,
+  initialValuesCustomer,
+  UserCreateSchema,
+} from "../schemas/CustomerSchema";
+import { InputError } from "@/components/common/InputError";
+import { showToast } from "@/adapters/toast/handleToast";
+import {
+  createCustomer_api,
+  updateCustomer_api,
+} from "../api/customer.service";
+import { useBookingContext } from "@/Context/BookingProvider";
+import { useEffect } from "react";
 
-// Esquema de validación con Zod
-const formSchema = z.object({
-  name: z.string().min(1, "El nombre es requerido"),
-  category: z.string().min(1, "La categoría es requerida"),
-  date: z.date({ required_error: "La fecha es requerida" }),
-});
+type FormCustomerProps = {
+  getAllcustomer: () => void;
+};
 
-type FormValues = z.infer<typeof formSchema>;
-
-export const FormCustomer = () => {
+export const FormCustomer = ({ getAllcustomer }: FormCustomerProps) => {
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      category: "",
-      date: new Date(),
-    },
+    setValue,
+  } = useForm<CustomerCreate | Customer>({
+    resolver: zodResolver(UserCreateSchema),
+    defaultValues: initialValuesCustomer,
   });
 
-  const onSubmit = (data: FormValues) => {
-    console.log("Formulario enviado:", data);
+  const { setModal, customerSelected } = useBookingContext();
+
+  const onSubmit = async (data: CustomerCreate | Customer) => {
+    const res = customerSelected
+      ? await updateCustomer_api({ id: customerSelected.id, ...data })
+      : await createCustomer_api(data);
+
+    showToast(
+      res.message || "Customer created successfully",
+      res.success ? "success" : "error"
+    );
+
+    if (res.success) {
+      getAllcustomer();
+      setModal(false);
+      control._reset();
+    }
   };
 
-  return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <div>
-        <label
-          htmlFor="name"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Nombre
-        </label>
-        <Controller
-          name="name"
-          control={control}
-          render={({ field }) => (
-            <Input
-              {...field}
-              id="name"
-              placeholder="Ingresa tu nombre"
-              className="mt-1"
-            />
-          )}
-        />
-        {errors.name && (
-          <p className="text-sm text-red-500">{errors.name.message}</p>
-        )}
-      </div>
+  const onError = () => {
+    showToast("There are errors in the form", "error");
+  };
 
-      {/* Select */}
-      <div>
+  useEffect(() => {
+    if (customerSelected) {
+      setValue("documentNumber", customerSelected.documentNumber);
+      setValue("name", customerSelected.name);
+      setValue("lastname", customerSelected.lastname);
+      setValue("age", customerSelected.age);
+      setValue("phoneNumber", customerSelected.phoneNumber);
+      setValue("email", customerSelected.email);
+    }
+  }, [customerSelected, setValue]);
+  return (
+    <>
+      <h1 className="text-2xl font-bold">
+        {customerSelected ? "Edit Customer" : "Create Customer"}
+      </h1>
+      <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-4">
+        <div>
+          <label
+            htmlFor="documentNumber"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Document Number
+          </label>
+          <Controller
+            name="documentNumber"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                id="documentNumber"
+                placeholder="Enter your document number"
+                className="mt-1"
+              />
+            )}
+          />
+          {errors.documentNumber && (
+            <InputError msg={errors.documentNumber?.message} />
+          )}
+        </div>
+
+        <div>
+          <label
+            htmlFor="name"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Name
+          </label>
+          <Controller
+            name="name"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                id="name"
+                placeholder="Enter your name"
+                className="mt-1"
+              />
+            )}
+          />
+          {errors.name && <InputError msg={errors.name?.message} />}
+        </div>
+
+        <div>
+          <label htmlFor="" className="block text-sm font-medium text-gray-700">
+            Lastname
+          </label>
+          <Controller
+            name="lastname"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                id="lastname"
+                placeholder="Enter your lastname"
+                className="mt-1"
+              />
+            )}
+          />
+          {errors.lastname && <InputError msg={errors.lastname?.message} />}
+        </div>
+        <div>
+          <label
+            htmlFor="documentNumber"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Age
+          </label>
+          <Controller
+            name="age"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                id="age"
+                type="number"
+                placeholder="0"
+                className="mt-1"
+                onChange={(e) => field.onChange(Number(e.target.value))}
+              />
+            )}
+          />
+          {errors.age && <InputError msg={errors.age?.message} />}
+        </div>
+        <div>
+          <label
+            htmlFor="phoneNumber"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Phone Number
+          </label>
+          <Controller
+            name="phoneNumber"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                id="phoneNumber"
+                placeholder="Enter your phone number"
+                className="mt-1"
+              />
+            )}
+          />
+          {errors.phoneNumber && (
+            <InputError msg={errors.phoneNumber?.message} />
+          )}
+        </div>
+        <div>
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Email
+          </label>
+          <Controller
+            name="email"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                id="email"
+                placeholder="Enter your email"
+                className="mt-1"
+              />
+            )}
+          />
+          {errors.email && <InputError msg={errors.email?.message} />}
+        </div>
+
+        {/* Select */}
+        {/*      <div>
         <label
           htmlFor="category"
           className="block text-sm font-medium text-gray-700"
@@ -91,12 +229,12 @@ export const FormCustomer = () => {
           )}
         />
         {errors.category && (
-          <p className="text-sm text-red-500">{errors.category.message}</p>
+          <p className={errorClass}>{errors.category.message}</p>
         )}
-      </div>
+      </div> */}
 
-      {/* Campo de fecha */}
-      <div>
+        {/* Campo de fecha */}
+        {/*  <div>
         <label
           htmlFor="date"
           className="block text-sm font-medium text-gray-700"
@@ -116,14 +254,15 @@ export const FormCustomer = () => {
           )}
         />
         {errors.date && (
-          <p className="text-sm text-red-500">{errors.date.message}</p>
+          <p className={errorClass}>{errors.date.message}</p>
         )}
-      </div>
+      </div> */}
 
-      {/* Botón de enviar */}
-      <Button type="submit" className="w-full">
-        Enviar
-      </Button>
-    </form>
+        {/* Botón de enviar */}
+        <Button type="submit" className="w-full">
+          {customerSelected ? "Update Customer" : "Create Customer"}
+        </Button>
+      </form>{" "}
+    </>
   );
 };

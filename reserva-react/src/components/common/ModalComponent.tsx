@@ -1,4 +1,4 @@
-import { Fragment, ReactNode, SetStateAction, Dispatch } from "react";
+import { Fragment, ReactNode } from "react";
 import {
   Dialog,
   DialogPanel,
@@ -9,7 +9,7 @@ import {
 type ModalDefaultProps = {
   children: ReactNode;
   modal: boolean;
-  setModal: Dispatch<SetStateAction<boolean>>;
+  setModal: (value: boolean) => void;
 };
 
 export const ModalDefault = ({

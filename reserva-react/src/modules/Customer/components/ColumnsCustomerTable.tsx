@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 
-import { Customer } from "@/types/customer.type";
 import { DropDownActions } from "@/components/common/DropDownActions";
+import { Customer } from "../schemas/CustomerSchema";
 
 export type ActionsDropTable = {
   editAction: (customer: Customer) => void;
@@ -14,6 +14,10 @@ export const getColumsCustomerTable = ({
 }: ActionsDropTable) => {
   const columns: ColumnDef<Customer>[] = [
     {
+      accessorKey: "id",
+      header: "ID",
+    },
+    {
       accessorKey: "documentNumber",
       header: "Nro. Documento",
     },
@@ -22,7 +26,7 @@ export const getColumsCustomerTable = ({
       header: "Name",
     },
     {
-      accessorKey: "lastName",
+      accessorKey: "lastname",
       header: "Last Name",
     },
     {
