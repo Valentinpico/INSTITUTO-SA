@@ -1,6 +1,7 @@
 import { ReactNode, useContext, useState } from "react";
 import BookingContext from "./BookingContext"; // Ajusta la ruta de importación según sea necesario
 import { Customer } from "@/modules/Customer/schemas/CustomerSchema";
+import { Room } from "@/modules/Room/schemas/RoomSchema";
 
 type BookingProviderProps = {
   children: ReactNode;
@@ -11,6 +12,7 @@ export const BookingProvider = ({ children }: BookingProviderProps) => {
   const [customerSelected, setCustomerSelected] = useState<Customer | null>(
     null
   );
+  const [roomSelected, setRoomSelected] = useState<Room | null>(null);
 
   return (
     <BookingContext.Provider
@@ -19,6 +21,8 @@ export const BookingProvider = ({ children }: BookingProviderProps) => {
         setModal,
         customerSelected,
         setCustomerSelected,
+        roomSelected,
+        setRoomSelected,
       }}
     >
       {children}

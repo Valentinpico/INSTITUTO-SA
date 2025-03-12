@@ -1,48 +1,32 @@
 import { ColumnDef } from "@tanstack/react-table";
-
 import { DropDownActions } from "@/components/common/DropDownActions";
-import { Customer } from "../schemas/CustomerSchema";
+import { Room } from "../schemas/RoomSchema";
 import { BadgeStatus } from "@/components/common/BadgeStatus";
 
 export type ActionsDropTable = {
-  editAction: (customer: Customer) => void;
-  deleteAction: (customer: Customer) => void;
+  editAction: (room: Room) => void;
+  deleteAction: (room: Room) => void;
 };
 
-export const getColumsCustomerTable = ({
+export const getColumsRoomTable = ({
   deleteAction,
   editAction,
 }: ActionsDropTable) => {
-  const columns: ColumnDef<Customer>[] = [
+  const columns: ColumnDef<Room>[] = [
     {
       accessorKey: "id",
       header: "ID",
     },
-    {
-      accessorKey: "documentNumber",
-      header: "Nro. Documento",
-    },
+
     {
       accessorKey: "name",
       header: "Name",
     },
-    {
-      accessorKey: "lastname",
-      header: "Last Name",
-    },
-    {
-      accessorKey: "age",
-      header: "Age",
-    },
-    {
-      accessorKey: "email",
-      header: "Email",
-    },
-    {
-      accessorKey: "phoneNumber",
-      header: "Phone Number",
-    },
 
+    {
+      accessorKey: "number",
+      header: "Number",
+    },
     {
       accessorKey: "status",
       header: "Status",
@@ -52,11 +36,12 @@ export const getColumsCustomerTable = ({
       id: "actions",
       header: "Actions",
       cell: ({ row }) => {
-        const user = row.original;
+        const room = row.original;
+
         return (
           <DropDownActions
-            deleteAction={() => deleteAction(user)}
-            editAction={() => editAction(user)}
+            deleteAction={() => deleteAction(room)}
+            editAction={() => editAction(room)}
           />
         );
       },

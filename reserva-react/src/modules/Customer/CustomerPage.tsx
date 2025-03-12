@@ -7,8 +7,6 @@ export const CustomerPage = () => {
         Customers Admin
       </h1>
 
-      {/* TableCustomer component */}
-
       <TableCustomer />
     </div>
   );
