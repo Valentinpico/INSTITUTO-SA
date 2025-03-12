@@ -3,24 +3,24 @@ import { z } from "zod";
 
 export const initialValuesCustomer: Customer = {
   id: 0,
-  documentNumber: "",
+  status: true,
   name: "",
+  documentNumber: "",
   lastname: "",
   age: 0,
   phoneNumber: "",
   email: "",
-  status: true,
 };
 
 export const UserSchema = z.object({
   id: z.number(),
-  documentNumber: z.string().min(1, "The document number is required"),
+  status: z.boolean(),
   name: z.string().min(1, "The name is required"),
+  documentNumber: z.string().min(1, "The document number is required"),
   lastname: z.string().min(1, "The lastname is required"),
   age: z.number().min(1, "The age is required"),
   phoneNumber: z.string().min(1, "The phone number is required"),
   email: z.string().email("The email is invalid"),
-  status: z.boolean(),
 });
 export type Customer = z.infer<typeof UserSchema>;
 
