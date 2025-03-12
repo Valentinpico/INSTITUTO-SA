@@ -1,43 +1,44 @@
 import { API_URL } from "@/utils/env";
 import axios from "axios";
 import {
-  Room,
-  RoomCreate,
-  RoomApiSchema,
-  RoomsApiSchema,
-} from "../schemas/RoomSchema";
+  Seat,
+  SeatCreate,
+  SeatApiSchema,
+  SeatsApiSchema,
+} from "../schemas/SeatSchema";
 import { ApiResponse } from "@/schemas/ApiResponseSchema";
 import { showToast } from "@/adapters/toast/handleToast";
 
-const uri = `${API_URL}/Room`;
+const uri = `${API_URL}/Seat`;
 
-export const getRooms_api = async () => {
+export const getSeats_api = async () => {
   try {
     const response = await axios.get(uri);
 
-    const validateResponse = RoomsApiSchema.safeParse(response.data);
+    const validateResponse = SeatsApiSchema.safeParse(response.data);
 
     if (!validateResponse.success) {
-      showToast("error en los datos y el schema", "error");
+      showToast("error con la validacion del schema", "error");
       throw new Error(validateResponse.error.message);
     }
 
     return validateResponse.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      return error.response?.data as ApiResponse<Room[]>;
+      return error.response?.data as ApiResponse<Seat[]>;
     }
     throw error;
   }
 };
 
-export const getRoomById_api = async (id: Room["id"]) => {
+export const getSeatById_api = async (id: Seat["id"]) => {
   try {
     const response = await axios.get(`${uri}/${id}`);
 
-    const validateResponse = RoomApiSchema.safeParse(response.data);
+    const validateResponse = SeatApiSchema.safeParse(response.data);
 
     if (!validateResponse.success) {
+      showToast("error con la validacion del schema", "error");
       console.log(validateResponse.error.errors);
       throw new Error(validateResponse.error.message);
     }
@@ -45,38 +46,40 @@ export const getRoomById_api = async (id: Room["id"]) => {
     return validateResponse.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      return error.response?.data as ApiResponse<Room>;
+      return error.response?.data as ApiResponse<Seat>;
     }
     throw error;
   }
 };
 
-export const createRoom_api = async (roomCreate: RoomCreate) => {
+export const createSeat_api = async (roomCreate: SeatCreate) => {
   try {
     const response = await axios.post(uri, roomCreate);
 
-    const validateResponse = RoomApiSchema.safeParse(response.data);
+    const validateResponse = SeatApiSchema.safeParse(response.data);
 
     if (!validateResponse.success) {
+      showToast("error con la validacion del schema", "error");
       throw new Error(validateResponse.error.message);
     }
 
     return validateResponse.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      return error.response?.data as ApiResponse<Room>;
+      return error.response?.data as ApiResponse<Seat>;
     }
     throw error;
   }
 };
 
-export const updateRoom_api = async (Room: Room) => {
+export const updateSeat_api = async (Seat: Seat) => {
   try {
-    const response = await axios.put(`${uri}/`, Room);
+    const response = await axios.put(`${uri}/`, Seat);
 
-    const validateResponse = RoomApiSchema.safeParse(response.data);
+    const validateResponse = SeatApiSchema.safeParse(response.data);
 
     if (!validateResponse.success) {
+      showToast("error con la validacion del schema", "error");
       console.log(validateResponse.error.errors);
       throw new Error(validateResponse.error.message);
     }
@@ -84,19 +87,20 @@ export const updateRoom_api = async (Room: Room) => {
     return validateResponse.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      return error.response?.data as ApiResponse<Room>;
+      return error.response?.data as ApiResponse<Seat>;
     }
     throw error;
   }
 };
 
-export const deleteRoom_api = async (id: Room["id"]) => {
+export const deleteSeat_api = async (id: Seat["id"]) => {
   try {
     const response = await axios.delete(`${uri}/${id}`);
 
-    const validateResponse = RoomApiSchema.safeParse(response.data);
+    const validateResponse = SeatApiSchema.safeParse(response.data);
 
     if (!validateResponse.success) {
+      showToast("error con la validacion del schema", "error");
       console.log(validateResponse.error.errors);
       throw new Error(validateResponse.error.message);
     }
@@ -104,7 +108,7 @@ export const deleteRoom_api = async (id: Room["id"]) => {
     return validateResponse.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      return error.response?.data as ApiResponse<Room>;
+      return error.response?.data as ApiResponse<Seat>;
     }
     throw error;
   }

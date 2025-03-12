@@ -62,7 +62,7 @@ export const FormRoom = ({ getAllRooms }: FormCustomerProps) => {
   return (
     <>
       <h1 className="text-2xl font-bold">
-        {roomSelected ? "Edit Customer" : "Create Customer"}
+        {roomSelected ? "Edit room" : "Create room"}
       </h1>
       <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-4">
         <div>

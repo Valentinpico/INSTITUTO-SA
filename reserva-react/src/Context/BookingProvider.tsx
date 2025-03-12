@@ -3,6 +3,7 @@ import BookingContext from "./BookingContext"; // Ajusta la ruta de importación
 import { Customer } from "@/modules/Customer/schemas/CustomerSchema";
 import { Room } from "@/modules/Room/schemas/RoomSchema";
 import { Movie } from "@/modules/Movie/schemas/MovieSchema";
+import { Seat } from "@/modules/Seat/schemas/SeatSchema";
 
 type BookingProviderProps = {
   children: ReactNode;
@@ -18,9 +19,9 @@ export const BookingProvider = ({ children }: BookingProviderProps) => {
   /*   const [bookingSelected, setBookingSelected] = useState<Booking | null>(null);
   const [billboardSelected, setBillboardSelected] = useState<Billboard | null>(
     null
-  );
+  ); */
   const [seatSelected, setSeatSelected] = useState<Seat | null>(null);
- */
+
   return (
     <BookingContext.Provider
       value={{
@@ -32,6 +33,8 @@ export const BookingProvider = ({ children }: BookingProviderProps) => {
         setRoomSelected,
         movieSelected,
         setMovieSelected,
+        seatSelected,
+        setSeatSelected,
       }}
     >
       {children}

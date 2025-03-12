@@ -9,7 +9,7 @@ export const initialValuesRoom: Room = {
 };
 
 export const RoomSchema = z.object({
-  id: z.number(),
+  id: z.number().min(1, "The id is required"),
   status: z.boolean(),
   name: z.string().min(1, "The name is required"),
   number: z.number().min(1, "The number is required"),
