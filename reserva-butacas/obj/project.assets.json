@@ -6359,24 +6359,27 @@
     ]
   },
   "packageFolders": {
-    "/Users/valentinpico/.nuget/packages/": {}
+    "C:\\Users\\valen\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/valentinpico/Documents/pruebas-tecnicas/INSTITUTO-SA/reserva-butacas/reserva-butacas.csproj",
+      "projectUniqueName": "C:\\pruebas-tecnicas\\INSTITUTO-SA\\reserva-butacas\\reserva-butacas.csproj",
       "projectName": "reserva-butacas",
-      "projectPath": "/Users/valentinpico/Documents/pruebas-tecnicas/INSTITUTO-SA/reserva-butacas/reserva-butacas.csproj",
-      "packagesPath": "/Users/valentinpico/.nuget/packages/",
-      "outputPath": "/Users/valentinpico/Documents/pruebas-tecnicas/INSTITUTO-SA/reserva-butacas/obj/",
+      "projectPath": "C:\\pruebas-tecnicas\\INSTITUTO-SA\\reserva-butacas\\reserva-butacas.csproj",
+      "packagesPath": "C:\\Users\\valen\\.nuget\\packages\\",
+      "outputPath": "C:\\pruebas-tecnicas\\INSTITUTO-SA\\reserva-butacas\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/valentinpico/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\valen\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -6394,8 +6397,7 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "direct"
-      },
-      "SdkAnalysisLevel": "9.0.200"
+      }
     },
     "frameworks": {
       "net8.0": {
@@ -6469,7 +6471,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.200/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
