@@ -1,3 +1,4 @@
+import { Billboard } from "@/modules/Billboard/schemas/BillboardSchema";
 import { Customer } from "@/modules/Customer/schemas/CustomerSchema";
 import { Movie } from "@/modules/Movie/schemas/MovieSchema";
 import { Room } from "@/modules/Room/schemas/RoomSchema";
@@ -15,6 +16,8 @@ type BookingContextType = {
   setMovieSelected: (value: Movie | null) => void;
   seatSelected: Seat | null;
   setSeatSelected: (value: Seat | null) => void;
+  billboardSelected: Billboard | null;
+  setBillboardSelected: (value: Billboard | null) => void;
 };
 
 const BookingContext = createContext<BookingContextType>(

@@ -20,6 +20,23 @@ namespace reserva_butacas.Modules.Room.Aplication.Services
         {
             var room = _mapper.Map<RoomEntity>(entity);
 
+            var nameExist = await _roomRepository.SearchAsync(x => x.Name == entity.Name);
+
+            if (nameExist.Any())
+            {
+                throw new BadRequestException($"The name {entity.Name} already exists in the database");
+            }
+
+            var numberExist = await _roomRepository.SearchAsync(x => x.Number == entity.Number && x.Name == entity.Name);
+
+            if (numberExist.Any())
+            {
+                throw new BadRequestException($"The number {entity.Number} already exists in the room {entity.Name}");
+            }
+
+
+
+
             await _roomRepository.AddAsync(room);
         }
 
@@ -62,6 +79,22 @@ namespace reserva_butacas.Modules.Room.Aplication.Services
         {
             var roomExist = await _roomRepository.GetByIdAsync(entity.Id)
                 ?? throw new NotFoundException("Room not found");
+
+            var nameExist = await _roomRepository.SearchAsync(x => x.Name == entity.Name && x.Id != entity.Id);
+
+            if (nameExist.Any())
+            {
+                throw new BadRequestException($"The name {entity.Name} already exists in the database");
+            }
+
+            var numberExist = await _roomRepository.SearchAsync(x => x.Number == entity.Number && x.Name == entity.Name && x.Id != entity.Id);
+
+            if (numberExist.Any())
+            {
+                throw new BadRequestException($"The number {entity.Number} already exists in the room {entity.Name}");
+            }
+
+
 
             var room = _mapper.Map<RoomEntity>(entity);
 

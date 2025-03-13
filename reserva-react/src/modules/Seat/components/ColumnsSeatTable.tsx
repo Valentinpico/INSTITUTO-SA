@@ -30,6 +30,11 @@ export const getColumsSeatTable = ({
     {
       accessorKey: "roomID",
       header: "Room",
+      cell: ({ row }) => {
+        const id = row.getValue("roomID") as number;
+
+        return <span>{id}</span>;
+      },
     },
 
     {

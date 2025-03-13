@@ -32,6 +32,13 @@ namespace reserva_butacas.Modules.Movie.Aplication.Services
                 throw new BadRequestException("Duration not valid ");
             }
 
+            var nameExist = await _movieRepository.SearchAsync(x => x.Name == movieCreatedDTO.Name);
+
+            if (nameExist.Any())
+            {
+                throw new BadRequestException($"The name {movieCreatedDTO.Name} already exists in the database");
+            }
+
             var movieEntity = _mapper.Map<MovieEntity>(movieCreatedDTO);
 
             await _movieRepository.AddAsync(movieEntity);

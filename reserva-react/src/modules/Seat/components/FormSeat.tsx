@@ -13,7 +13,7 @@ import { InputError } from "@/components/common/InputError";
 import { showToast } from "@/adapters/toast/handleToast";
 import { createSeat_api, updateSeat_api } from "../api/seat.service";
 import { useBookingContext } from "@/Context/BookingProvider";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   Select,
   SelectContent,
@@ -21,14 +21,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { getRooms_api } from "@/modules/Room/api/room.service";
-import { OptionsSelect, optionsToSelect } from "../utils/optionsSelects";
+import { OptionsSelect } from "../utils/optionsSelects";
 
 type FormCustomerProps = {
   getAllSeats: () => void;
+  rooms: OptionsSelect[];
 };
 
-export const FormSeat = ({ getAllSeats }: FormCustomerProps) => {
+export const FormSeat = ({ getAllSeats, rooms }: FormCustomerProps) => {
+  const { setModal, seatSelected } = useBookingContext();
   const {
     control,
     handleSubmit,
@@ -36,25 +37,8 @@ export const FormSeat = ({ getAllSeats }: FormCustomerProps) => {
     setValue,
   } = useForm<SeatCreate | Seat>({
     resolver: zodResolver(SeatCreateSchema),
-    defaultValues: initialValuesSeat,
+    defaultValues: { ...initialValuesSeat, roomID: seatSelected?.roomID || 0 },
   });
-
-  const { setModal, seatSelected } = useBookingContext();
-
-  const [optionsRoomsToSelect, setOptionsRoomsToSelect] = useState<
-    OptionsSelect[]
-  >([]);
-
-  const getRooms = async () => {
-    const res = await getRooms_api();
-
-    if (!res.success) {
-      showToast(res.message || "An error occurred", "error");
-    }
-    const options = optionsToSelect(res.data || []);
-
-    setOptionsRoomsToSelect(options);
-  };
 
   const onSubmit = async (data: SeatCreate | Seat) => {
     const res = seatSelected
@@ -85,9 +69,6 @@ export const FormSeat = ({ getAllSeats }: FormCustomerProps) => {
     setValue("roomID", seatSelected.roomID);
   }, [seatSelected, setValue]);
 
-  useEffect(() => {
-    getRooms();
-  }, []);
   return (
     <>
       <h1 className="text-2xl font-bold">
@@ -162,7 +143,7 @@ export const FormSeat = ({ getAllSeats }: FormCustomerProps) => {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="0">Select a room</SelectItem>
-                    {optionsRoomsToSelect.map((option) => (
+                    {rooms.map((option) => (
                       <SelectItem
                         key={option.value}
                         value={option.value.toString()}

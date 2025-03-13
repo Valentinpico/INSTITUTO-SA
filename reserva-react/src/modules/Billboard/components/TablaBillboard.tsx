@@ -1,23 +1,25 @@
-import { TablaDinamica } from "@/components/common/TablaDinamica";
-import { getColumsMovieTable } from "./ColumnsMovieTable";
 import { Button } from "@/components/ui/button";
 import { ModalDefault } from "@/components/common/ModalComponent";
 import { useEffect, useState } from "react";
-import { FormMovie } from "./FormMovie";
-import { Movie } from "../schemas/MovieSchema";
-import { deleteMovie_api, getMovies_api } from "../api/movie.service";
+import { FormBillboard } from "./FormBillboard";
+import { Billboard } from "../schemas/BillboardSchema";
+import {
+  deleteBillboard_api,
+  getBillboards_api,
+} from "../api/billboard.service";
 import { showToast } from "@/adapters/toast/handleToast";
 import { useBookingContext } from "@/Context/BookingProvider";
+import { BillboardCard } from "./BillboardCard";
 
-export const TableMovie = () => {
-  const { modal, setModal, movieSelected, setMovieSelected } =
+export const TableBillboard = () => {
+  const { modal, setModal, billboardSelected, setBillboardSelected } =
     useBookingContext();
 
-  const [data, setData] = useState<Movie[]>([]);
+  const [data, setData] = useState<Billboard[]>([]);
   const [modalEliminar, setModalEliminar] = useState(false);
 
-  const getAllMovie = async () => {
-    const res = await getMovies_api();
+  const getAllBillboard = async () => {
+    const res = await getBillboards_api();
 
     if (!res.success) {
       showToast(res.message || "An error occurred", "error");
@@ -26,41 +28,30 @@ export const TableMovie = () => {
     setData(res.data || []);
   };
 
-  const handleEdit = (customer: Movie) => {
-    setModal(true);
-    setMovieSelected(customer);
-  };
-  const ButtonDelete = (customer: Movie) => {
+  const buttonDelete = (customer: Billboard) => {
     setModalEliminar(true);
-    setMovieSelected(customer);
+    setBillboardSelected(customer);
   };
-  const columns = getColumsMovieTable({
-    deleteAction: ButtonDelete,
-    editAction: handleEdit,
-  });
 
   const handleCreate = () => {
     setModal(true);
-    setMovieSelected(null);
+    setBillboardSelected(null);
   };
 
   const handleDelete = async () => {
-    const res = await deleteMovie_api(movieSelected?.id || 0);
+    const res = await deleteBillboard_api(billboardSelected?.id || 0);
 
     showToast(
-      res.message || "Movie deleted successfully",
+      res.message || "Billboard deleted successfully",
       res.success ? "success" : "error"
     );
 
-    getAllMovie();
+    getAllBillboard();
     setModalEliminar(false);
   };
 
   useEffect(() => {
-    getAllMovie();
-    return () => {
-      console.log("TableMovie unmounted");
-    };
+    getAllBillboard();
   }, []);
   return (
     <div className="container mx-auto py-5">
@@ -69,11 +60,26 @@ export const TableMovie = () => {
         className="mb-2 p-5 hover:cursor-pointer"
         onClick={handleCreate}
       >
-        New Movie
+        New Billboard
       </Button>
-      <TablaDinamica columns={columns} data={data} />
+  
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {data.length > 0 ? (
+          data.map((billboard) => (
+            <BillboardCard
+              key={billboard.id}
+              billboard={billboard}
+              buttonDelete={buttonDelete}
+              billboards={data}
+            />
+          ))
+        ) : (
+          <p>No billboards found</p>
+        )}
+      </div>
+
       <ModalDefault modal={modal} setModal={setModal}>
-        <FormMovie getAllMovies={getAllMovie} />
+        <FormBillboard getAllBillboards={getAllBillboard} />
       </ModalDefault>
 
       <ModalDefault modal={modalEliminar} setModal={setModalEliminar}>
@@ -82,12 +88,12 @@ export const TableMovie = () => {
 
         <div className="space-y-1 border-t pt-4 mt-4">
           <p>
-            <span className="font-semibold">Document Number:</span>
-            {movieSelected?.id}
+            <span className="font-semibold">ID:</span>
+            {billboardSelected?.id}
           </p>
           <p>
-            <span className="font-semibold">Name:</span>
-            {movieSelected?.name}
+            <span className="font-semibold">estado:</span>
+            {billboardSelected?.status}
           </p>
         </div>
         <div className="flex justify-end space-x-2 border-t pt-4 mt-4">

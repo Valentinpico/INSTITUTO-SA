@@ -34,6 +34,13 @@ namespace reserva_butacas.Modules.Seat.Aplication.Services
             var roomExists = await _roomRepository.GetByIdAsync(entity.RoomID)
                 ?? throw new NotFoundException($"Room with ID {entity.RoomID} not found"); ;
 
+            var rowNumberExist = await _seatRepository.SearchAsync(x => x.RowNumber == entity.RowNumber && x.RoomID == entity.RoomID && x.Number == entity.Number);
+
+            if (rowNumberExist.Any())
+            {
+                throw new BadRequestException($"The seat {entity.Number} in row {entity.RowNumber} already exists in the room {roomExists.Name}");
+            }
+
             var seat = _mapper.Map<SeatEntity>(entity);
 
             await _seatRepository.AddAsync(seat);
@@ -108,6 +115,13 @@ namespace reserva_butacas.Modules.Seat.Aplication.Services
 
             var roomExists = await _roomRepository.GetByIdAsync(entity.RoomID)
                 ?? throw new NotFoundException($"Room with ID {entity.RoomID} not found");
+
+            var rowNumberExist = await _seatRepository.SearchAsync(x => x.RowNumber == entity.RowNumber && x.RoomID == entity.RoomID && x.Number == entity.Number && x.Id != entity.Id);
+
+            if (rowNumberExist.Any())
+            {
+                throw new BadRequestException($"The seat {entity.Number} in row {entity.RowNumber} already exists in the room {roomExists.Name}");
+            }
 
 
             seat = _mapper.Map<SeatEntity>(entity);

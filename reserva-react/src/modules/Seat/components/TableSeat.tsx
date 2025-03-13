@@ -8,12 +8,25 @@ import { Seat } from "../schemas/SeatSchema";
 import { getSeats_api, deleteSeat_api } from "../api/seat.service";
 import { showToast } from "@/adapters/toast/handleToast";
 import { useBookingContext } from "@/Context/BookingProvider";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { OptionsSelect, optionsToSelect } from "../utils/optionsSelects";
+import { getRooms_api } from "@/modules/Room/api/room.service";
 
 export const TableSeat = () => {
   const { modal, setModal, roomSelected, setSeatSelected, seatSelected } =
     useBookingContext();
 
   const [data, setData] = useState<Seat[]>([]);
+  const [optionsRoomsToSelect, setOptionsRoomsToSelect] = useState<
+    OptionsSelect[]
+  >([]);
+  const [filter, setFilter] = useState(0);
   const [modalEliminar, setModalEliminar] = useState(false);
 
   const getAllSeats = async () => {
@@ -56,23 +69,60 @@ export const TableSeat = () => {
     getAllSeats();
     setModalEliminar(false);
   };
+  const getRooms = async () => {
+    const res = await getRooms_api();
+
+    if (!res.success) {
+      showToast(res.message || "An error occurred", "error");
+    }
+    const options = optionsToSelect(res.data || []);
+
+    setOptionsRoomsToSelect(options);
+  };
+
+  const dataFiltered = data.filter((seat) =>
+    filter === 0 ? true : seat.roomID === filter
+  );
 
   useEffect(() => {
     getAllSeats();
+    getRooms();
   }, []);
   return (
     <div className="container mx-auto py-5">
-      <Button
-        variant={"outline"}
-        className="mb-2 p-5 hover:cursor-pointer"
-        onClick={handleCreate}
-      >
-        New Seat
-      </Button>
-      <TablaDinamica columns={columns} data={data} />
+      <div className="flex justify-between items-center">
+        <Button
+          variant={"outline"}
+          className="mb-2 p-5 hover:cursor-pointer"
+          onClick={handleCreate}
+        >
+          New Seat
+        </Button>
+
+        <Select>
+          <Select
+            onValueChange={(e) => setFilter(Number(e))}
+            value={filter.toString()}
+          >
+            <SelectTrigger className="mt-1">
+              <SelectValue placeholder="Select a room" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="0">All rooms</SelectItem>
+              {optionsRoomsToSelect.map((option) => (
+                <SelectItem key={option.value} value={option.value.toString()}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </Select>
+      </div>
+
+      <TablaDinamica columns={columns} data={dataFiltered} />
 
       <ModalDefault modal={modal} setModal={setModal}>
-        <FormSeat getAllSeats={getAllSeats} />
+        <FormSeat getAllSeats={getAllSeats} rooms={optionsRoomsToSelect} />
       </ModalDefault>
 
       <ModalDefault modal={modalEliminar} setModal={setModalEliminar}>

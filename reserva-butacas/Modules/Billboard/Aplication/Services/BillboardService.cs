@@ -149,7 +149,10 @@ namespace reserva_butacas.Modules.Billboard.Aplication.Services
             var billboard = await _billboardRepository.GetByIdAsync(entity.Id)
                 ?? throw new NotFoundException($"Billboard with ID {entity.Id} not found in order to update");
 
-            await _billboardRepository.UpdateAsync(billboard);
+
+            var updatedBillboard = _mapper.Map<BillboardEntity>(entity);
+
+            await _billboardRepository.UpdateAsync(updatedBillboard);
         }
 
 

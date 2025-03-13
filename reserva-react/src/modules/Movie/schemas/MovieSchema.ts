@@ -12,7 +12,7 @@ export const initialValuesMovie: Movie = {
 };
 
 export const MovieSchema = z.object({
-  id: z.number(),
+  id: z.number().min(1, "The id is required"),
   status: z.boolean(),
   name: z.string().min(1, "The name is required"),
   genre: z
