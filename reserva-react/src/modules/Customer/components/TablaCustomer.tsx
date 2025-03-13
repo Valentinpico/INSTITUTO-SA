@@ -5,26 +5,18 @@ import { ModalDefault } from "@/components/common/ModalComponent";
 import { useEffect, useState } from "react";
 import { FormCustomer } from "./FormCustomer";
 import { Customer } from "../schemas/CustomerSchema";
-import { deleteCustomer_api, getCustomers_api } from "../api/customer.service";
+import { deleteCustomer_api } from "../api/customer.service";
 import { showToast } from "@/adapters/toast/handleToast";
-import { useBookingContext } from "@/Context/BookingProvider";
+import { useEntityContext } from "@/Context/Entities/EntityProvider";
+import { useBookingContext } from "@/Context/Bookings/BookingProvider";
 
 export const TableCustomer = () => {
   const { modal, setModal, customerSelected, setCustomerSelected } =
-    useBookingContext();
+    useEntityContext();
+  const { getAllCustomers,allCustomers } = useBookingContext();
 
-  const [data, setData] = useState<Customer[]>([]);
   const [modalEliminar, setModalEliminar] = useState(false);
 
-  const getAllCustomer = async () => {
-    const res = await getCustomers_api();
-
-    if (!res.success) {
-      showToast(res.message || "An error occurred", "error");
-    }
-
-    setData(res.data || []);
-  };
 
   const handleEdit = (customer: Customer) => {
     setModal(true);
@@ -52,16 +44,14 @@ export const TableCustomer = () => {
       res.success ? "success" : "error"
     );
 
-    getAllCustomer();
+    getAllCustomers();
     setModalEliminar(false);
   };
 
   useEffect(() => {
-    getAllCustomer();
-    return () => {
-      console.log("TableCustomer unmounted");
-    };
-  }, []);
+    getAllCustomers();
+  
+  }, [getAllCustomers]);
   return (
     <div className="container mx-auto py-5">
       <Button
@@ -71,9 +61,9 @@ export const TableCustomer = () => {
       >
         New Customer
       </Button>
-      <TablaDinamica columns={columns} data={data} />
+      <TablaDinamica columns={columns} data={allCustomers} />
       <ModalDefault modal={modal} setModal={setModal}>
-        <FormCustomer getAllcustomer={getAllCustomer} />
+        <FormCustomer  />
       </ModalDefault>
 
       <ModalDefault modal={modalEliminar} setModal={setModalEliminar}>

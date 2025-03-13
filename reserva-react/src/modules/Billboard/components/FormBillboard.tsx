@@ -15,8 +15,8 @@ import {
   createBillboard_api,
   updateBillboard_api,
 } from "../api/billboard.service";
-import { useBookingContext } from "@/Context/BookingProvider";
-import { useEffect, useState } from "react";
+import { useEntityContext } from "@/Context/Entities/EntityProvider";
+import { useEffect } from "react";
 
 import {
   Select,
@@ -26,18 +26,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  OptionsSelect,
-  optionsToSelect,
+  optionsToSelect
 } from "@/modules/Seat/utils/optionsSelects";
-import { getRooms_api } from "@/modules/Room/api/room.service";
-import { getMovies_api } from "@/modules/Movie/api/movie.service";
 
-type FormBillboardProps = {
-  getAllBillboards: () => void;
-};
+import { useBookingContext } from "@/Context/Bookings/BookingProvider";
 
-export const FormBillboard = ({ getAllBillboards }: FormBillboardProps) => {
-  const { setModal, billboardSelected } = useBookingContext();
+export const FormBillboard = () => {
+  const { setModal, billboardSelected } = useEntityContext();
+
+  const { getAllBillboards, getAllMovies, getAllRooms, allRooms, allMovies } =
+    useBookingContext();
+
   const {
     control,
     handleSubmit,
@@ -51,7 +50,6 @@ export const FormBillboard = ({ getAllBillboards }: FormBillboardProps) => {
       movieID: billboardSelected?.movieID || 0,
     },
   });
-
   const onSubmit = async (data: BillboardCreate | Billboard) => {
     const res = billboardSelected
       ? await updateBillboard_api({ id: billboardSelected.id, ...data })
@@ -69,27 +67,12 @@ export const FormBillboard = ({ getAllBillboards }: FormBillboardProps) => {
     }
   };
 
-  const [optionsRoomsToSelect, setOptionsRoomsToSelect] = useState<
-    OptionsSelect[]
-  >([]);
-  const [optionsMoviesToSelect, setOptionsMoviesToSelect] = useState<
-    OptionsSelect[]
-  >([]);
-
   const onError = () => {
-    console.log(errors, "errors");
     showToast("There are errors in the form", "error");
   };
 
-  const getAllRoomsAndMovies = async () => {
-    const resRooms = getRooms_api();
-    const resMovies = getMovies_api();
-    const [rooms, movies] = await Promise.all([resRooms, resMovies]);
-    const optionsRooms = optionsToSelect(rooms.data || []);
-    const optionsMovies = optionsToSelect(movies.data || []);
-    setOptionsRoomsToSelect(optionsRooms);
-    setOptionsMoviesToSelect(optionsMovies);
-  };
+  const optionsRoomsToSelect = optionsToSelect(allRooms || []);
+  const optionsMoviesToSelect = optionsToSelect(allMovies || []);
 
   useEffect(() => {
     if (billboardSelected) {
@@ -102,8 +85,9 @@ export const FormBillboard = ({ getAllBillboards }: FormBillboardProps) => {
   }, [billboardSelected, setValue]);
 
   useEffect(() => {
-    getAllRoomsAndMovies();
-  }, []);
+    getAllRooms();
+    getAllMovies();
+  }, [getAllMovies, getAllRooms]);
 
   return (
     <>

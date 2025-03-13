@@ -12,14 +12,11 @@ import {
 import { InputError } from "@/components/common/InputError";
 import { showToast } from "@/adapters/toast/handleToast";
 import { createRoom_api, updateRoom_api } from "../api/room.service";
-import { useBookingContext } from "@/Context/BookingProvider";
+import { useEntityContext } from "@/Context/Entities/EntityProvider";
 import { useEffect } from "react";
+import { useBookingContext } from "@/Context/Bookings/BookingProvider";
 
-type FormCustomerProps = {
-  getAllRooms: () => void;
-};
-
-export const FormRoom = ({ getAllRooms }: FormCustomerProps) => {
+export const FormRoom = () => {
   const {
     control,
     handleSubmit,
@@ -30,7 +27,8 @@ export const FormRoom = ({ getAllRooms }: FormCustomerProps) => {
     defaultValues: initialValuesRoom,
   });
 
-  const { setModal, roomSelected } = useBookingContext();
+  const { setModal, roomSelected } = useEntityContext();
+  const { getAllRooms } = useBookingContext();
 
   const onSubmit = async (data: RoomCreate | Room) => {
     const res = roomSelected

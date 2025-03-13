@@ -12,7 +12,7 @@ import {
 import { InputError } from "@/components/common/InputError";
 import { showToast } from "@/adapters/toast/handleToast";
 import { createMovie_api, updateMovie_api } from "../api/movie.service";
-import { useBookingContext } from "@/Context/BookingProvider";
+import { useEntityContext } from "@/Context/Entities/EntityProvider";
 import { useEffect } from "react";
 import {
   Select,
@@ -22,12 +22,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { optionsMovieGenre } from "../utils/enums";
+import { useBookingContext } from "@/Context/Bookings/BookingProvider";
 
-type FormMovieProps = {
-  getAllMovies: () => void;
-};
 
-export const FormMovie = ({ getAllMovies }: FormMovieProps) => {
+export const FormMovie = () => {
   const {
     control,
     handleSubmit,
@@ -38,7 +36,8 @@ export const FormMovie = ({ getAllMovies }: FormMovieProps) => {
     defaultValues: initialValuesMovie,
   });
 
-  const { setModal, movieSelected } = useBookingContext();
+  const { setModal, movieSelected } = useEntityContext();
+  const { getAllMovies } = useBookingContext();
 
   const onSubmit = async (data: MovieCreate | Movie) => {
     const res = movieSelected

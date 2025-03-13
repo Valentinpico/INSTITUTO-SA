@@ -4,13 +4,16 @@ import "./index.css";
 import { Router } from "./router";
 import { RouterProvider } from "react-router-dom";
 import ToastAdapter from "./adapters/toast/ToastAdapter";
-import { BookingProvider } from "./Context/BookingProvider";
+import { EntityProvider } from "./Context/Entities/EntityProvider";
+import { BookingProvider } from "./Context/Bookings/BookingProvider";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <BookingProvider>
-      <RouterProvider router={Router} />
-    </BookingProvider>
+    <EntityProvider>
+      <BookingProvider>
+        <RouterProvider router={Router} />
+      </BookingProvider>
+    </EntityProvider>
     <ToastAdapter />
   </StrictMode>
 );

@@ -3,30 +3,19 @@ import { ModalDefault } from "@/components/common/ModalComponent";
 import { useEffect, useState } from "react";
 import { FormBillboard } from "./FormBillboard";
 import { Billboard } from "../schemas/BillboardSchema";
-import {
-  deleteBillboard_api,
-  getBillboards_api,
-} from "../api/billboard.service";
+import { deleteBillboard_api } from "../api/billboard.service";
 import { showToast } from "@/adapters/toast/handleToast";
-import { useBookingContext } from "@/Context/BookingProvider";
+import { useEntityContext } from "@/Context/Entities/EntityProvider";
 import { BillboardCard } from "./BillboardCard";
+import { useBookingContext } from "@/Context/Bookings/BookingProvider";
 
 export const TableBillboard = () => {
   const { modal, setModal, billboardSelected, setBillboardSelected } =
-    useBookingContext();
+    useEntityContext();
 
-  const [data, setData] = useState<Billboard[]>([]);
   const [modalEliminar, setModalEliminar] = useState(false);
 
-  const getAllBillboard = async () => {
-    const res = await getBillboards_api();
-
-    if (!res.success) {
-      showToast(res.message || "An error occurred", "error");
-    }
-
-    setData(res.data || []);
-  };
+  const { getAllBillboards, allBillboards } = useBookingContext();
 
   const buttonDelete = (customer: Billboard) => {
     setModalEliminar(true);
@@ -46,13 +35,13 @@ export const TableBillboard = () => {
       res.success ? "success" : "error"
     );
 
-    getAllBillboard();
+    getAllBillboards();
     setModalEliminar(false);
   };
 
   useEffect(() => {
-    getAllBillboard();
-  }, []);
+    getAllBillboards();
+  }, [getAllBillboards]);
   return (
     <div className="container mx-auto py-5">
       <Button
@@ -62,15 +51,14 @@ export const TableBillboard = () => {
       >
         New Billboard
       </Button>
-  
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {data.length > 0 ? (
-          data.map((billboard) => (
+        {allBillboards.length > 0 ? (
+          allBillboards.map((billboard) => (
             <BillboardCard
               key={billboard.id}
               billboard={billboard}
               buttonDelete={buttonDelete}
-              billboards={data}
             />
           ))
         ) : (
@@ -79,7 +67,7 @@ export const TableBillboard = () => {
       </div>
 
       <ModalDefault modal={modal} setModal={setModal}>
-        <FormBillboard getAllBillboards={getAllBillboard} />
+        <FormBillboard />
       </ModalDefault>
 
       <ModalDefault modal={modalEliminar} setModal={setModalEliminar}>

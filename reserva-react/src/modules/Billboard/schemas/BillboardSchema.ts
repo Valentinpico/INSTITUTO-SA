@@ -1,5 +1,11 @@
-import { MovieSchema } from "@/modules/Movie/schemas/MovieSchema";
-import { RoomSchema } from "@/modules/Room/schemas/RoomSchema";
+import {
+  initialValuesMovie,
+  MovieSchema,
+} from "@/modules/Movie/schemas/MovieSchema";
+import {
+  initialValuesRoom,
+  RoomSchema,
+} from "@/modules/Room/schemas/RoomSchema";
 import { ApiResponseSchema } from "@/schemas/ApiResponseSchema";
 import { z } from "zod";
 
@@ -11,6 +17,8 @@ export const initialValuesBillboard: Billboard = {
   endTime: "",
   movieID: 0,
   roomID: 0,
+  movie: initialValuesMovie ,
+  room: initialValuesRoom,
 };
 
 export const BillboardSchema = z.object({
@@ -25,6 +33,8 @@ export const BillboardSchema = z.object({
   }),
   movieID: MovieSchema.shape.id,
   roomID: RoomSchema.shape.id,
+  movie: MovieSchema.nullable(),
+  room: RoomSchema.nullable(),
 });
 export type Billboard = z.infer<typeof BillboardSchema>;
 

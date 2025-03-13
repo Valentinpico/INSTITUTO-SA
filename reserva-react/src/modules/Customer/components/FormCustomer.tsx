@@ -15,14 +15,12 @@ import {
   createCustomer_api,
   updateCustomer_api,
 } from "../api/customer.service";
-import { useBookingContext } from "@/Context/BookingProvider";
+import { useEntityContext } from "@/Context/Entities/EntityProvider";
 import { useEffect } from "react";
+import { useBookingContext } from "@/Context/Bookings/BookingProvider";
 
-type FormCustomerProps = {
-  getAllcustomer: () => void;
-};
 
-export const FormCustomer = ({ getAllcustomer }: FormCustomerProps) => {
+export const FormCustomer = () => {
   const {
     control,
     handleSubmit,
@@ -33,7 +31,9 @@ export const FormCustomer = ({ getAllcustomer }: FormCustomerProps) => {
     defaultValues: initialValuesCustomer,
   });
 
-  const { setModal, customerSelected } = useBookingContext();
+  const { setModal, customerSelected } = useEntityContext();
+
+  const { getAllCustomers } = useBookingContext();
 
   const onSubmit = async (data: CustomerCreate | Customer) => {
     const res = customerSelected
@@ -46,7 +46,7 @@ export const FormCustomer = ({ getAllcustomer }: FormCustomerProps) => {
     );
 
     if (res.success) {
-      getAllcustomer();
+      getAllCustomers();
       setModal(false);
       control._reset();
     }

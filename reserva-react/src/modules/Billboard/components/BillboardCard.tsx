@@ -10,12 +10,8 @@ import { Badge } from "@/components/ui/badge";
 import { Clock, Film, DoorOpen } from "lucide-react";
 import { Billboard } from "../schemas/BillboardSchema";
 import { Button } from "@/components/ui/button";
-import { useBookingContext } from "@/Context/BookingProvider";
-import { useEffect, useState } from "react";
-import { Movie } from "@/modules/Movie/schemas/MovieSchema";
-import { Room } from "@/modules/Room/schemas/RoomSchema";
-import { getRoomById_api } from "@/modules/Room/api/room.service";
-import { getMovieById_api } from "@/modules/Movie/api/movie.service";
+import { useEntityContext } from "@/Context/Entities/EntityProvider";
+
 import { MovieGenreEnumLabel } from "@/modules/Movie/utils/enums";
 
 const formatTime = (timeString: string): string => {
@@ -45,34 +41,15 @@ const formatDate = (dateString: string) => {
 type BillboardCardProps = {
   billboard: Billboard;
   buttonDelete: (billboard: Billboard) => void;
-  billboards: Billboard[];
 };
 
 export const BillboardCard = ({
   billboard,
   buttonDelete,
-  billboards,
 }: BillboardCardProps) => {
-  const { id, status, date, startTime, endTime, movieID, roomID } = billboard;
+  const { id, status, date, startTime, endTime, movie, room } = billboard;
 
-  const { setModal, setBillboardSelected } = useBookingContext();
-
-  const [room, setRoom] = useState<Room | null>(null);
-  const [movie, setMovie] = useState<Movie | null>(null);
-
-  const fetchAllData = async () => {
-    const resRoom = getRoomById_api(roomID);
-    const resMovie = getMovieById_api(movieID);
-
-    const [room, movie] = await Promise.all([resRoom, resMovie]);
-
-    setRoom(room.data || null);
-    setMovie(movie.data || null);
-  };
-
-  useEffect(() => {
-    fetchAllData();
-  }, [billboards]);
+  const { setModal, setBillboardSelected } = useEntityContext();
 
   return (
     <Card className="w-full max-w-md shadow-lg hover:shadow-xl transition-shadow duration-300">

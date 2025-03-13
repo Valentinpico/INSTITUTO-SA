@@ -12,7 +12,7 @@ import {
 import { InputError } from "@/components/common/InputError";
 import { showToast } from "@/adapters/toast/handleToast";
 import { createSeat_api, updateSeat_api } from "../api/seat.service";
-import { useBookingContext } from "@/Context/BookingProvider";
+import { useEntityContext } from "@/Context/Entities/EntityProvider";
 import { useEffect } from "react";
 import {
   Select,
@@ -21,15 +21,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { OptionsSelect } from "../utils/optionsSelects";
+import { useBookingContext } from "@/Context/Bookings/BookingProvider";
+import { optionsToSelect } from "../utils/optionsSelects";
 
-type FormCustomerProps = {
-  getAllSeats: () => void;
-  rooms: OptionsSelect[];
-};
-
-export const FormSeat = ({ getAllSeats, rooms }: FormCustomerProps) => {
-  const { setModal, seatSelected } = useBookingContext();
+export const FormSeat = () => {
+  const { setModal, seatSelected } = useEntityContext();
   const {
     control,
     handleSubmit,
@@ -39,6 +35,8 @@ export const FormSeat = ({ getAllSeats, rooms }: FormCustomerProps) => {
     resolver: zodResolver(SeatCreateSchema),
     defaultValues: { ...initialValuesSeat, roomID: seatSelected?.roomID || 0 },
   });
+
+  const { getAllSeats, allRooms } = useBookingContext();
 
   const onSubmit = async (data: SeatCreate | Seat) => {
     const res = seatSelected
@@ -60,6 +58,8 @@ export const FormSeat = ({ getAllSeats, rooms }: FormCustomerProps) => {
   const onError = () => {
     showToast("There are errors in the form", "error");
   };
+
+  const rooms = optionsToSelect(allRooms);
 
   useEffect(() => {
     if (!seatSelected) return;

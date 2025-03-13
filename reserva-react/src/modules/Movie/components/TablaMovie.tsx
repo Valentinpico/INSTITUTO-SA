@@ -5,26 +5,17 @@ import { ModalDefault } from "@/components/common/ModalComponent";
 import { useEffect, useState } from "react";
 import { FormMovie } from "./FormMovie";
 import { Movie } from "../schemas/MovieSchema";
-import { deleteMovie_api, getMovies_api } from "../api/movie.service";
+import { deleteMovie_api } from "../api/movie.service";
 import { showToast } from "@/adapters/toast/handleToast";
-import { useBookingContext } from "@/Context/BookingProvider";
+import { useEntityContext } from "@/Context/Entities/EntityProvider";
+import { useBookingContext } from "@/Context/Bookings/BookingProvider";
 
 export const TableMovie = () => {
   const { modal, setModal, movieSelected, setMovieSelected } =
-    useBookingContext();
+    useEntityContext();
 
-  const [data, setData] = useState<Movie[]>([]);
   const [modalEliminar, setModalEliminar] = useState(false);
-
-  const getAllMovie = async () => {
-    const res = await getMovies_api();
-
-    if (!res.success) {
-      showToast(res.message || "An error occurred", "error");
-    }
-
-    setData(res.data || []);
-  };
+  const { allMovies, getAllMovies } = useBookingContext();
 
   const handleEdit = (customer: Movie) => {
     setModal(true);
@@ -52,16 +43,13 @@ export const TableMovie = () => {
       res.success ? "success" : "error"
     );
 
-    getAllMovie();
+    getAllMovies();
     setModalEliminar(false);
   };
 
   useEffect(() => {
-    getAllMovie();
-    return () => {
-      console.log("TableMovie unmounted");
-    };
-  }, []);
+    getAllMovies();
+  }, [getAllMovies]);
   return (
     <div className="container mx-auto py-5">
       <Button
@@ -71,9 +59,9 @@ export const TableMovie = () => {
       >
         New Movie
       </Button>
-      <TablaDinamica columns={columns} data={data} />
+      <TablaDinamica columns={columns} data={allMovies} />
       <ModalDefault modal={modal} setModal={setModal}>
-        <FormMovie getAllMovies={getAllMovie} />
+        <FormMovie />
       </ModalDefault>
 
       <ModalDefault modal={modalEliminar} setModal={setModalEliminar}>

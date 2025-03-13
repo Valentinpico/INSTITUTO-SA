@@ -5,26 +5,16 @@ import { ModalDefault } from "@/components/common/ModalComponent";
 import { useEffect, useState } from "react";
 import { FormRoom } from "./FormRoom";
 import { Room } from "../schemas/RoomSchema";
-import { getRooms_api, deleteRoom_api } from "../api/room.service";
+import { deleteRoom_api } from "../api/room.service";
 import { showToast } from "@/adapters/toast/handleToast";
-import { useBookingContext } from "@/Context/BookingProvider";
+import { useEntityContext } from "@/Context/Entities/EntityProvider";
+import { useBookingContext } from "@/Context/Bookings/BookingProvider";
 
 export const TableRoom = () => {
-  const { modal, setModal, roomSelected, setRoomSelected } =
-    useBookingContext();
+  const { modal, setModal, roomSelected, setRoomSelected } = useEntityContext();
 
-  const [data, setData] = useState<Room[]>([]);
   const [modalEliminar, setModalEliminar] = useState(false);
-
-  const getAllRooms = async () => {
-    const res = await getRooms_api();
-
-    if (!res.success) {
-      showToast(res.message || "An error occurred", "error");
-    }
-
-    setData(res.data || []);
-  };
+  const { allRooms, getAllRooms } = useBookingContext();
 
   const handleEdit = (room: Room) => {
     setModal(true);
@@ -58,7 +48,7 @@ export const TableRoom = () => {
 
   useEffect(() => {
     getAllRooms();
-  }, []);
+  }, [getAllRooms]);
   return (
     <div className="container mx-auto py-5">
       <Button
@@ -68,10 +58,10 @@ export const TableRoom = () => {
       >
         New Room
       </Button>
-      <TablaDinamica columns={columns} data={data} />
+      <TablaDinamica columns={columns} data={allRooms} />
 
       <ModalDefault modal={modal} setModal={setModal}>
-        <FormRoom getAllRooms={getAllRooms} />
+        <FormRoom />
       </ModalDefault>
 
       <ModalDefault modal={modalEliminar} setModal={setModalEliminar}>
