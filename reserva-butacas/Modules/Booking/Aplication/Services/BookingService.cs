@@ -36,6 +36,11 @@ namespace reserva_butacas.Modules.Booking.Aplication.Services
             var seat = await _seatRepository.GetByIdAsync(entity.SeatID)
                 ?? throw new NotFoundException("Seat not found");
 
+            var seatOcupied = await _bookingRepository.SearchAsync(b => b.SeatID == entity.SeatID && b.BillboardID == entity.BillboardID && b.Status);
+
+            if (seatOcupied.Any())
+                throw new NotFoundException("Seat is already occupied");
+
             var billboard = await _billboardRepository.GetByIdAsync(entity.BillboardID)
                 ?? throw new NotFoundException("Billboard not found");
 
@@ -90,6 +95,11 @@ namespace reserva_butacas.Modules.Booking.Aplication.Services
             var seat = await _seatRepository.GetByIdAsync(entity.SeatID)
                 ?? throw new NotFoundException("Seat not found");
 
+            var seatOcupied = await _bookingRepository.SearchAsync(b => b.SeatID == entity.SeatID && b.BillboardID == entity.BillboardID && b.Status);
+
+            if (seatOcupied.Any())
+                throw new NotFoundException("Seat is already occupied");
+
             var billboard = await _billboardRepository.GetByIdAsync(entity.BillboardID)
                 ?? throw new NotFoundException("Billboard not found");
 
@@ -97,5 +107,7 @@ namespace reserva_butacas.Modules.Booking.Aplication.Services
 
             await _bookingRepository.UpdateAsync(bookingUpdated);
         }
+   
+        
     }
 }

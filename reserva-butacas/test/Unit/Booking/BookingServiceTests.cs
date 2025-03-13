@@ -81,7 +81,8 @@ namespace reserva_butacas.test.Unit.Booking
             {
                 Id = 1,
                 Name = "Room 1",
-                Status = true
+                Status = true,
+                Seats = []
             };
 
             var movieEntity = new MovieEntity

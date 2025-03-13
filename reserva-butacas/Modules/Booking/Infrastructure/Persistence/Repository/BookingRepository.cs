@@ -25,5 +25,19 @@ namespace reserva_butacas.Modules.Booking.Infrastructure.Persistence.Repository
                        b.Status == true)
                 .ToListAsync();
         }
+
+        public new async Task<IEnumerable<BookingEntity>> GetAllAsync()
+        {
+            return await _context.Bookings.Include(r => r.Billboard).Include(r => r.Customer).Include(r => r.Seat).ToListAsync();
+        }
+        public new async Task<BookingEntity?> GetByIdAsync(int id)
+        {
+            return await _context.Bookings.Include(r => r.Billboard).Include(r => r.Customer).Include(r => r.Seat).FirstOrDefaultAsync(r => r.Id == id);
+        }
+
+        public new async Task<IEnumerable<BookingEntity>> SearchAsync(Func<BookingEntity, bool> predicate)
+        {
+            return await Task.Run(() => _context.Bookings.Include(r => r.Billboard).Include(r => r.Customer).Include(r => r.Seat).Where(predicate).ToList());
+        }
     }
 }

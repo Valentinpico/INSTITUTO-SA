@@ -55,7 +55,7 @@ namespace reserva_butacas.test.Integration.Booking
         private void SeedDatabase()
         {
             // Add test data
-            var room = new RoomEntity { Name = "Test Room", Number = 1 };
+            var room = new RoomEntity { Name = "Test Room", Number = 1, Seats = [] };
             DbContext.Rooms.Add(room);
 
             var movie = new MovieEntity

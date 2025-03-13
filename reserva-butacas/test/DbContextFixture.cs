@@ -34,8 +34,8 @@ namespace reserva_butacas.test
 
         private void SeedTestData()
         {
-            var room1 = new RoomEntity { Name = "Sala 1", Number = 1, Status = true };
-            var room2 = new RoomEntity { Name = "Sala 2", Number = 2, Status = true };
+            var room1 = new RoomEntity { Name = "Sala 1", Number = 1, Status = true, Seats = [] };
+            var room2 = new RoomEntity { Name = "Sala 2", Number = 2, Status = true, Seats = [] };
             Context.Rooms.AddRange(room1, room2);
             Context.SaveChanges();
 
