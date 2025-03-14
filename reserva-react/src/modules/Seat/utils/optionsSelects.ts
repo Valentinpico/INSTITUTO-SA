@@ -38,7 +38,21 @@ export const optionsToSelectBillboards = (
 ): OptionsSelect[] => {
   if (billboards.length === 0) return [];
 
-  return billboards.map((billboard) => ({
+  // Filter billboards that are today or in the future
+  const billboardsToday = billboards.filter(
+    (billboard) => new Date(billboard.date) >= new Date()
+  );
+
+  console.log(
+    billboardsToday.map((billboard) => ({
+      value: billboard.id,
+      label: `${billboard.movie?.name} || ${
+        billboard.room?.name
+      } || ${formatDate(billboard.date)} ${formatTime(billboard.startTime)}`,
+    }))
+  );
+
+  return billboardsToday.map((billboard) => ({
     value: billboard.id,
     label: `${billboard.movie?.name} || ${billboard.room?.name} || ${formatDate(
       billboard.date

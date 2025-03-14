@@ -91,11 +91,13 @@ export const FormBooking = () => {
       setValue("billboardID", bookingSelected.billboardID);
       setValue("customerID", bookingSelected.customerID);
       setValue("seatID", bookingSelected.seatID);
-      
+
       const billboard = allBillboards.find(
         (billboard) => billboard.id === Number(bookingSelected.billboardID)
       ) || { room: { seats: [] } };
-      setSeatsByBillboard(billboard.room?.seats || null);
+
+      const seatsActive = billboard.room?.seats.filter((seat) => seat.status);
+      setSeatsByBillboard(seatsActive || null);
     }
   }, [bookingSelected, setValue]);
 
@@ -168,7 +170,8 @@ export const FormBooking = () => {
                   const billboard = allBillboards.find(
                     (billboard) => billboard.id === Number(e)
                   ) || { room: { seats: [] } };
-                  setSeatsByBillboard(billboard.room?.seats || null);
+                  const seatsActive = billboard.room?.seats.filter((seat) => seat.status);
+                  setSeatsByBillboard(seatsActive || null);
                 }}
                 value={field.value.toString()}
               >
@@ -213,7 +216,7 @@ export const FormBooking = () => {
                     <SelectValue placeholder="Select a seat" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="0">Select a movie</SelectItem>
+                    <SelectItem value="0">Select a seat</SelectItem>
                     {optionsSeatsToSelect.map((option) => (
                       <SelectItem
                         key={option.value}

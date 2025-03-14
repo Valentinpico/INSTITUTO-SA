@@ -9,12 +9,14 @@ import { showToast } from "@/adapters/toast/handleToast";
 import { useEntityContext } from "@/Context/Entities/EntityProvider";
 import { useBookingContext } from "@/Context/Bookings/BookingProvider";
 import { FormBooking } from "./FormBooking";
+import { ModalMoviesHorror } from "@/modules/Movie/components/ModalMoviesHorror";
 
 export const TableBooking = () => {
   const { modal, setModal, roomSelected, setBookingSelected, seatSelected } =
     useEntityContext();
 
   const [modalEliminar, setModalEliminar] = useState(false);
+  const [modalMoviesHorror, setModalMoviesHorror] = useState(false);
   const { getAllBookings, allBookings } = useBookingContext();
 
   const handleEdit = (room: Booking) => {
@@ -25,10 +27,16 @@ export const TableBooking = () => {
     setModalEliminar(true);
     setBookingSelected(room);
   };
+
+
   const columns = getColumsBookingTable({
     deleteAction: ButtonDelete,
     editAction: handleEdit,
+  
   });
+
+
+
 
   const handleCreate = () => {
     console.log(seatSelected);
@@ -53,7 +61,7 @@ export const TableBooking = () => {
   }, []);
   return (
     <div className="container mx-auto py-5">
-      <div className="flex justify-between items-center">
+      <div className="flex gap-4">
         <Button
           variant={"outline"}
           className="mb-2 p-5 hover:cursor-pointer"
@@ -61,25 +69,20 @@ export const TableBooking = () => {
         >
           New Booking
         </Button>
-
-        {/*  <Select>
-          <Select
-            onValueChange={(e) => setFilter(Number(e))}
-            value={filter.toString()}
-          >
-            <SelectTrigger className="mt-1">
-              <SelectValue placeholder="Select a room" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="0">All rooms</SelectItem>
-              {optionsRoomsToSelect.map((option) => (
-                <SelectItem key={option.value} value={option.value.toString()}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent∏
-          </Select>
-        </Select> */}
+        <Button
+          variant={"outline"}
+          className="mb-2 p-5 hover:cursor-pointer"
+          onClick={() => getAllBookings()}  
+        >
+          Get all bookings
+        </Button>
+        <Button
+          variant={"outline"}
+          className="mb-2 p-5 hover:cursor-pointer"
+          onClick={() => setModalMoviesHorror(true)}
+        >
+          Get horror movies
+        </Button>
       </div>
 
       <TablaDinamica columns={columns} data={allBookings} />
@@ -110,6 +113,9 @@ export const TableBooking = () => {
             Delete
           </Button>
         </div>
+      </ModalDefault>
+      <ModalDefault modal={modalMoviesHorror} setModal={setModalMoviesHorror}>
+        <ModalMoviesHorror />
       </ModalDefault>
     </div>
   );

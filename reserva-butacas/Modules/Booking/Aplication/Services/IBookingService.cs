@@ -11,6 +11,7 @@ namespace reserva_butacas.Modules.Booking.Aplication.Services
     public interface IBookingService : IBaseService<BookingEntity, BookingDTO, BookingCreateDTO>
     {
 
+        public Task UpdateAsync(BookingUpdateDTO booking);
 
     }
 }

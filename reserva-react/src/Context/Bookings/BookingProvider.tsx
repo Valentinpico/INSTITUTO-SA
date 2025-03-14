@@ -76,6 +76,7 @@ export const BookingProvider = ({ children }: BookingProviderProps) => {
         getAllSeats,
         getAllBillboards,
         getAllBookings,
+        setAllBookings,
       }}
     >
       {children}

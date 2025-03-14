@@ -138,13 +138,7 @@ namespace reserva_butacas.test.Unit.Booking
                 .Returns(Task.CompletedTask);
 
 
-            await _seatService.CancelSeatAndBookingAsync(
-                new SeatCancellationDTO
-                {
-                    BookingId = bookingId,
-                    SeatId = seatId
-                }
-            );
+            await _seatService.CancelSeatAndBookingAsync(1);
 
             _bookingRepositoryMock.Verify(repo => repo.GetByIdAsync(bookingId), Times.Once);
             _seatRepositoryMock.Verify(repo => repo.GetByIdAsync(seatId), Times.Once);

@@ -33,11 +33,13 @@ namespace reserva_butacas.Domain.AutoMappers
             CreateMap<BillboardEntity, BillboardDTO>();
             CreateMap<BillboardDTO, BillboardEntity>();
             CreateMap<BillboardCreateDTO, BillboardEntity>();
+            CreateMap<BillboardUpdateDTO, BillboardEntity>();
 
             //Booking
             CreateMap<BookingEntity, BookingDTO>();
             CreateMap<BookingDTO, BookingEntity>();
             CreateMap<BookingCreateDTO, BookingEntity>();
+            CreateMap<BookingUpdateDTO, BookingEntity>();
 
             //Movie
             CreateMap<MovieEntity, MovieDTO>();

@@ -61,7 +61,7 @@ namespace reserva_butacas.Modules.Booking.Aplication.Services
         {
             var bookings = await _bookingRepository.GetAllAsync();
 
-            bookings = bookings.Where(b => b.Status);
+            //bookings = bookings.Where(b => b.Status);
 
             return _mapper.Map<IEnumerable<BookingDTO>>(bookings) ?? [];
         }
@@ -84,30 +84,33 @@ namespace reserva_butacas.Modules.Booking.Aplication.Services
 
         }
 
-        public async Task UpdateAsync(BookingDTO entity)
+        public async Task UpdateAsync(BookingUpdateDTO bookingUpdateDTO)
         {
-            var booking = await _bookingRepository.GetByIdAsync(entity.Id)
+            var booking = await _bookingRepository.GetByIdAsync(bookingUpdateDTO.Id)
                 ?? throw new NotFoundException("Booking not found");
 
-            var customer = await _customerRepository.GetByIdAsync(entity.CustomerID)
+            var customer = await _customerRepository.GetByIdAsync(bookingUpdateDTO.CustomerID)
                 ?? throw new NotFoundException("Customer not found");
 
-            var seat = await _seatRepository.GetByIdAsync(entity.SeatID)
+            var seat = await _seatRepository.GetByIdAsync(bookingUpdateDTO.SeatID)
                 ?? throw new NotFoundException("Seat not found");
 
-            var seatOcupied = await _bookingRepository.SearchAsync(b => b.SeatID == entity.SeatID && b.BillboardID == entity.BillboardID && b.Status);
+            var seatOcupied = await _bookingRepository.SearchAsync(b => b.SeatID == bookingUpdateDTO.SeatID && b.BillboardID == bookingUpdateDTO.BillboardID && b.Status);
 
             if (seatOcupied.Any())
                 throw new NotFoundException("Seat is already occupied");
 
-            var billboard = await _billboardRepository.GetByIdAsync(entity.BillboardID)
+            var billboard = await _billboardRepository.GetByIdAsync(bookingUpdateDTO.BillboardID)
                 ?? throw new NotFoundException("Billboard not found");
 
-            var bookingUpdated = _mapper.Map<BookingEntity>(entity);
+            var bookingUpdated = _mapper.Map<BookingEntity>(bookingUpdateDTO);
 
             await _bookingRepository.UpdateAsync(bookingUpdated);
         }
-   
-        
+
+        public Task UpdateAsync(BookingDTO entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

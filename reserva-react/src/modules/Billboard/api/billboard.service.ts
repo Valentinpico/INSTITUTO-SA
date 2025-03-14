@@ -116,3 +116,25 @@ export const deleteBillboard_api = async (id: Billboard["id"]) => {
     throw error;
   }
 };
+
+export const cancelBillboard_api = async (id: Billboard["id"]) => {
+  try {
+    const response = await axios.post(`${uri}/cancel/${id}`);
+
+    const validateResponse = BillboardApiSchema.safeParse(response.data);
+
+    if (!validateResponse.success) {
+      showToast("error en el schema", "error");
+
+      console.log(validateResponse.error.errors);
+      throw new Error(validateResponse.error.message);
+    }
+
+    return validateResponse.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return error.response?.data as ApiResponse<Billboard>;
+    }
+    throw error;
+  }
+}

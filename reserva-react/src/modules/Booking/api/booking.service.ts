@@ -116,3 +116,27 @@ export const deleteBooking_api = async (id: Booking["id"]) => {
     throw error;
   }
 };
+
+export const getHorrorMovies_api = async (startDate: string, endDate: string) => {
+  try {
+    const response = await axios.get(`${uri}/horror`, {
+      params: {
+        startDate,
+        endDate,
+      },
+    });
+
+    const validateResponse = BookingsApiSchema.safeParse(response.data);
+
+    if (!validateResponse.success) {
+      throw new Error(validateResponse.error.message);
+    }
+
+    return validateResponse.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return error.response?.data as ApiResponse<Booking[]>;
+    }
+    throw error;
+  }
+}

@@ -5,6 +5,8 @@ import {
   SeatCreate,
   SeatApiSchema,
   SeatsApiSchema,
+  SeatsAvailableOrOccupiedApiSchema,
+  SeatsAvailableOrOccupied,
 } from "../schemas/SeatSchema";
 import { ApiResponse } from "@/schemas/ApiResponseSchema";
 import { showToast } from "@/adapters/toast/handleToast";
@@ -96,6 +98,51 @@ export const updateSeat_api = async (Seat: Seat) => {
 export const deleteSeat_api = async (id: Seat["id"]) => {
   try {
     const response = await axios.delete(`${uri}/${id}`);
+
+    const validateResponse = SeatApiSchema.safeParse(response.data);
+
+    if (!validateResponse.success) {
+      showToast("error con la validacion del schema", "error");
+      console.log(validateResponse.error.errors);
+      throw new Error(validateResponse.error.message);
+    }
+
+    return validateResponse.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return error.response?.data as ApiResponse<Seat>;
+    }
+    throw error;
+  }
+};
+
+export const getSeatsAvailabilityToday_api = async () => {
+  try {
+    const response =
+      await axios.get(`http://localhost:5090/api/Billboard/seats-availability/today
+`);
+
+    const validateResponse = SeatsAvailableOrOccupiedApiSchema.safeParse(
+      response.data
+    );
+
+    if (!validateResponse.success) {
+      showToast("error con la validacion del schema", "error");
+      throw new Error(validateResponse.error.message);
+    }
+
+    return validateResponse.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return error.response?.data as ApiResponse<SeatsAvailableOrOccupied[]>;
+    }
+    throw error;
+  }
+};
+
+export const cancelSeatReservation_api = async (id: Seat["id"]) => {
+  try {
+    const response = await axios.post(`${uri}/cancel/${id}`);
 
     const validateResponse = SeatApiSchema.safeParse(response.data);
 

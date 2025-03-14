@@ -38,7 +38,7 @@ namespace reserva_butacas.Modules.Billboard.Aplication.Services
             await _billboardRepository.AddAsync(billboard);
         }
 
-        public async Task<IEnumerable<CustomerEntity>> CancelBillboardAndBookingsAsync(BillboardCancellationDTO dto)
+        public async Task<IEnumerable<CustomerEntity>> CancelBillboardAndBookingsAsync(int id)
         {
             var affectedCustomers = new List<CustomerEntity>();
 
@@ -46,8 +46,8 @@ namespace reserva_butacas.Modules.Billboard.Aplication.Services
             {
                 await _unitOfWork.BeginTransactionAsync();
 
-                var billboard = await _billboardRepository.GetByIdAsync(dto.BillboardId)
-                    ?? throw new NotFoundException($"Billboard with ID {dto.BillboardId} not found");
+                var billboard = await _billboardRepository.GetByIdAsync(id)
+                    ?? throw new NotFoundException($"Billboard with ID {id} not found");
 
                 if (billboard.Date.Date < DateTime.Today)
                     throw new BadRequestException("No se puede cancelar funciones de la cartelera con fecha anterior a la actual");
@@ -55,9 +55,10 @@ namespace reserva_butacas.Modules.Billboard.Aplication.Services
                 billboard.Status = false;
                 await _billboardRepository.UpdateAsync(billboard);
 
-                var bookings = await _bookingRepository.SearchAsync(b => b.BillboardID == dto.BillboardId);
+                var bookings = await _bookingRepository.SearchAsync(b => b.BillboardID == id);
+                
                 if (bookings == null || !bookings.Any())
-                    throw new NotFoundException($"No bookings found for Billboard with ID {dto.BillboardId}");
+                    throw new NotFoundException($"No bookings found for Billboard with ID {id}");
 
                 foreach (var booking in bookings)
                 {
@@ -143,8 +144,12 @@ namespace reserva_butacas.Modules.Billboard.Aplication.Services
             return billboardsDTO ?? [];
         }
 
+        public Task UpdateAsync(BillboardDTO entity)
+        {
+            throw new NotImplementedException();
+        }
 
-        public async Task UpdateAsync(BillboardDTO entity)
+        public async Task UpdateAsync(BillboardUpdateDTO entity)
         {
             var billboard = await _billboardRepository.GetByIdAsync(entity.Id)
                 ?? throw new NotFoundException($"Billboard with ID {entity.Id} not found in order to update");

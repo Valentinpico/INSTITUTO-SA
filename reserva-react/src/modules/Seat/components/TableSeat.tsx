@@ -5,7 +5,7 @@ import { ModalDefault } from "@/components/common/ModalComponent";
 import { useEffect, useState } from "react";
 import { FormSeat } from "./FormSeat";
 import { Seat } from "../schemas/SeatSchema";
-import { deleteSeat_api } from "../api/seat.service";
+import { cancelSeatReservation_api, deleteSeat_api } from "../api/seat.service";
 import { showToast } from "@/adapters/toast/handleToast";
 import { useEntityContext } from "@/Context/Entities/EntityProvider";
 import {
@@ -19,8 +19,7 @@ import { optionsToSelect } from "../utils/optionsSelects";
 import { useBookingContext } from "@/Context/Bookings/BookingProvider";
 
 export const TableSeat = () => {
-  const { modal, setModal, roomSelected, setSeatSelected, seatSelected } =
-    useEntityContext();
+  const { modal, setModal, roomSelected, setSeatSelected } = useEntityContext();
 
   const [filter, setFilter] = useState(0);
   const [modalEliminar, setModalEliminar] = useState(false);
@@ -34,13 +33,24 @@ export const TableSeat = () => {
     setModalEliminar(true);
     setSeatSelected(room);
   };
+
+  const disableAction = async (room: Seat) => {
+    const res = await cancelSeatReservation_api(room.id);
+
+    showToast(
+      res.message || "Seat disabled successfully",
+      res.success ? "success" : "error"
+    );
+    getAllSeats();
+  };
+
   const columns = getColumsSeatTable({
     deleteAction: ButtonDelete,
     editAction: handleEdit,
+    disableAction: disableAction,
   });
 
   const handleCreate = () => {
-    console.log(seatSelected);
     setModal(true);
     setSeatSelected(null);
   };

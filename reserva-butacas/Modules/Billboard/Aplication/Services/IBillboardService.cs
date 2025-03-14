@@ -13,9 +13,10 @@ namespace reserva_butacas.Modules.Billboard.Aplication.Services
 {
     public interface IBillboardService : IBaseService<BillboardEntity, BillboardDTO, BillboardCreateDTO>
     {
-        Task<IEnumerable<CustomerEntity>> CancelBillboardAndBookingsAsync(BillboardCancellationDTO dto);
+        Task<IEnumerable<CustomerEntity>> CancelBillboardAndBookingsAsync(int id);
 
         Task CancelSeatAndBookingAsync(SeatCancellationDTO dto);
+        Task UpdateAsync(BillboardUpdateDTO billboard);
 
     }
 }

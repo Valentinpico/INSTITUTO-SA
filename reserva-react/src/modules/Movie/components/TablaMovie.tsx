@@ -52,13 +52,26 @@ export const TableMovie = () => {
   }, []);
   return (
     <div className="container mx-auto py-5">
-      <Button
-        variant={"outline"}
-        className="mb-2 p-5 hover:cursor-pointer"
-        onClick={handleCreate}
-      >
-        New Movie
-      </Button>
+      <div className="flex gap-4">
+        <Button
+          variant={"outline"}
+          className="mb-2 p-5 hover:cursor-pointer"
+          onClick={handleCreate}
+        >
+          New Movie
+        </Button>
+
+        <Button
+          variant={"outline"}
+          className="mb-2 p-5 hover:cursor-pointer"
+          onClick={() => getAllMovies()}
+        >
+          All movies
+        </Button>
+
+    
+      </div>
+
       <TablaDinamica columns={columns} data={allMovies} />
       <ModalDefault modal={modal} setModal={setModal}>
         <FormMovie />
@@ -87,6 +100,7 @@ export const TableMovie = () => {
           </Button>
         </div>
       </ModalDefault>
+     
     </div>
   );
 };

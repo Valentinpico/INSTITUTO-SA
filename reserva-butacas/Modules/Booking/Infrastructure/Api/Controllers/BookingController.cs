@@ -72,12 +72,12 @@ namespace reserva_butacas.Modules.Booking.Infrastructure.Api.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put(BookingDTO bookingDTO)
+        public async Task<IActionResult> Put(BookingUpdateDTO bookingUpdateDTO)
         {
-            await _bookingService.UpdateAsync(bookingDTO);
+            await _bookingService.UpdateAsync(bookingUpdateDTO);
 
             return Ok(
-                  ApiResponse<BookingDTO>.SuccessResponse(null, "Customer created successfully")
+                  ApiResponse<BookingUpdateDTO>.SuccessResponse(null, "Customer updated successfully")
             );
         }
 
@@ -87,7 +87,7 @@ namespace reserva_butacas.Modules.Booking.Infrastructure.Api.Controllers
             await _bookingService.DeleteAsync(id);
 
             return Ok(
-                    ApiResponse<BookingDTO>.SuccessResponse(null, "Customer created successfully")
+                    ApiResponse<BookingDTO>.SuccessResponse(null, "Customer deleted successfully")
             );
         }
 

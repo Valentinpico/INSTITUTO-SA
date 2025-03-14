@@ -13,6 +13,8 @@ import { Button } from "@/components/ui/button";
 import { useEntityContext } from "@/Context/Entities/EntityProvider";
 
 import { MovieGenreEnumLabel } from "@/modules/Movie/utils/enums";
+import { cancelBillboard_api } from "../api/billboard.service";
+import { showToast } from "@/adapters/toast/handleToast";
 
 export const formatTime = (timeString: string): string => {
   if (!timeString) return "N/A";
@@ -40,16 +42,25 @@ export const formatDate = (dateString: string) => {
 
 type BillboardCardProps = {
   billboard: Billboard;
-  buttonDelete: (billboard: Billboard) => void;
+  buttonDelete?: (billboard: Billboard) => void;
+  home: boolean;
 };
 
 export const BillboardCard = ({
   billboard,
   buttonDelete,
+  home = false,
 }: BillboardCardProps) => {
   const { id, status, date, startTime, endTime, movie, room } = billboard;
 
   const { setModal, setBillboardSelected } = useEntityContext();
+
+  const handleDisable = async () => {
+
+    const res = await cancelBillboard_api(billboard.id);
+
+    showToast(res.message || "Error", res.success ? "success" : "error");
+  };
 
   return (
     <Card className="w-full max-w-md shadow-lg hover:shadow-xl transition-shadow duration-300">
@@ -100,20 +111,39 @@ export const BillboardCard = ({
         </div>
       </CardContent>
 
-      <CardFooter className="flex justify-end space-x-2 border-t pt-4 ">
-        <Button
-          variant="outline"
-          onClick={() => {
-            setModal(true);
-            setBillboardSelected(billboard);
-          }}
-        >
-          Edit
-        </Button>
-        <Button variant="destructive" onClick={() => buttonDelete(billboard)}>
-          Delete
-        </Button>
-      </CardFooter>
+      {!home && buttonDelete && (
+        <CardFooter className="flex justify-end space-x-2 border-t pt-4 ">
+          <Button
+            variant="outline"
+            onClick={() => {
+              setModal(true);
+              setBillboardSelected(billboard);
+            }}
+          >
+            Edit
+          </Button>
+          <Button variant="default" onClick={handleDisable}>
+            Disablesssss
+          </Button>
+          <Button variant="destructive" onClick={() => buttonDelete(billboard)}>
+            Delete
+          </Button>
+        </CardFooter>
+      )}
+
+      {home && (
+        <CardFooter className="flex justify-end space-x-2 border-t pt-4 ">
+          <Button
+            variant="outline"
+            onClick={() => {
+              setModal(true);
+              setBillboardSelected(billboard);
+            }}
+          >
+            Buy Ticket
+          </Button>
+        </CardFooter>
+      )}
     </Card>
   );
 };

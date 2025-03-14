@@ -10,6 +10,6 @@ namespace reserva_butacas.Modules.Seat.Aplication.Services
 {
     public interface ISeatService : IBaseService<SeatEntity, SeatDTO, SeatCreateDTO>
     {
-        Task CancelSeatAndBookingAsync(SeatCancellationDTO dto);
+        Task CancelSeatAndBookingAsync(int dto);
     }
 }

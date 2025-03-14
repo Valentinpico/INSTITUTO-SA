@@ -18,10 +18,12 @@ namespace reserva_butacas.Modules.Seat.Infrastructure.Api.Controllers
     {
         private readonly ISeatService _seatService = seatService;
 
-        [HttpPost("cancel")]
-        public async Task<IActionResult> CancelSeatAndBooking(SeatCancellationDTO dto)
+        [HttpPost("cancel/{idSeat}")]
+        public async Task<IActionResult> CancelSeatAndBooking(int idSeat)
         {
-            await _seatService.CancelSeatAndBookingAsync(dto);
+
+            Console.WriteLine("CancelSeatAndBooking: ====================================" + idSeat);
+            await _seatService.CancelSeatAndBookingAsync(idSeat);
             return Ok(
                 ApiResponse<object>.SuccessResponse(null, "Seat and booking canceled successfully")
             );

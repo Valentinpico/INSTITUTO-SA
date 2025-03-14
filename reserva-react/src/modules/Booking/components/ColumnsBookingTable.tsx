@@ -24,7 +24,7 @@ export const getColumsBookingTable = ({
       header: "Date",
       cell: ({ row }) => {
         const date = row.original.date;
-        return <span>{formatDate(new Date(date).toISOString( ))}</span>;
+        return <span>{formatDate(new Date(date).toISOString())}</span>;
       },
     },
     {
@@ -69,6 +69,7 @@ export const getColumsBookingTable = ({
       header: "Status",
       cell: ({ row }) => <BadgeStatus status={row.getValue("status")} />,
     },
+
     {
       id: "actions",
       header: "Actions",

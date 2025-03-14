@@ -1,11 +1,5 @@
-import {
-  initialValuesMovie,
-  MovieSchema,
-} from "@/modules/Movie/schemas/MovieSchema";
-import {
-  initialValuesRoom,
-  RoomSchema,
-} from "@/modules/Room/schemas/RoomSchema";
+import { MovieSchema } from "@/modules/Movie/schemas/MovieSchema";
+import { RoomSchema } from "@/modules/Room/schemas/RoomSchema";
 import { ApiResponseSchema } from "@/schemas/ApiResponseSchema";
 import { z } from "zod";
 
@@ -17,8 +11,8 @@ export const initialValuesBillboard: Billboard = {
   endTime: "",
   movieID: 0,
   roomID: 0,
-  movie: initialValuesMovie ,
-  room: initialValuesRoom,
+  movie: null,
+  room: null,
 };
 
 export const BillboardSchema = z.object({

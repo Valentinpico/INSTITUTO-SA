@@ -33,10 +33,11 @@ namespace reserva_butacas.Modules.Billboard.Infrastructure.Api.Controllers
             );
         }
 
-        [HttpPost("cancel")]
-        public async Task<IActionResult> CancelBillboard(BillboardCancellationDTO dto)
+        [HttpPost("cancel/{id}")]
+        public async Task<IActionResult> CancelBillboard(int id)
         {
-            var affectedCustomers = await _billboardService.CancelBillboardAndBookingsAsync(dto);
+            var affectedCustomers = await _billboardService.CancelBillboardAndBookingsAsync(id);
+            
             return Ok(new
             {
                 Message = "Billboard and associated bookings cancelled successfully",
@@ -53,6 +54,7 @@ namespace reserva_butacas.Modules.Billboard.Infrastructure.Api.Controllers
         public async Task<IActionResult> GetSeatsAvailabilityForToday()
         {
             var result = await _seatRepository.GetSeatAvailabilityByRoomForToday();
+            
             return Ok(
                 ApiResponse<object>.SuccessResponse(result, "Seats availability for today")
             );
@@ -89,11 +91,11 @@ namespace reserva_butacas.Modules.Billboard.Infrastructure.Api.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<BillboardDTO>> Update(BillboardDTO billboard)
+        public async Task<ActionResult<BillboardDTO>> Update(BillboardUpdateDTO billboard)
         {
             await _billboardService.UpdateAsync(billboard);
 
-            return Ok(ApiResponse<BillboardDTO>.SuccessResponse(billboard, "Billboard actualizado"));
+            return Ok(ApiResponse<BillboardDTO>.SuccessResponse(null, "Billboard actualizado"));
         }
 
         [HttpDelete("{id}")]

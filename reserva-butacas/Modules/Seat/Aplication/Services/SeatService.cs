@@ -47,23 +47,32 @@ namespace reserva_butacas.Modules.Seat.Aplication.Services
 
         }
 
-        public async Task CancelSeatAndBookingAsync(SeatCancellationDTO dto)
+        public async Task CancelSeatAndBookingAsync(int idSeat)
         {
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
 
-                var seat = await _seatRepository.GetByIdAsync(dto.SeatId)
-                    ?? throw new NotFoundException($"Seat with ID {dto.SeatId} not found");
+                var seat = await _seatRepository.GetByIdAsync(idSeat)
+                    ?? throw new NotFoundException($"Seat with ID {idSeat} not found");
 
                 seat.Status = false;
+
                 await _seatRepository.UpdateAsync(seat);
 
-                var booking = await _bookingRepository.GetByIdAsync(dto.BookingId)
-                    ?? throw new NotFoundException($"Booking with ID {dto.BookingId} not found");
+                var today = DateTime.Today;
 
-                booking.Status = false;
-                await _bookingRepository.UpdateAsync(booking);
+                var listBookings = await _bookingRepository.SearchAsync(x => x.SeatID == idSeat
+                    && x.Status
+                    && x.Billboard.Date.Date >= today);
+
+
+                foreach (var booking in listBookings)
+                {
+                    booking.Status = false;
+                    Console.WriteLine("Customer affected: " + booking.CustomerID);
+                    await _bookingRepository.UpdateAsync(booking);
+                }
 
                 await _unitOfWork.CommitAsync();
             }
@@ -86,7 +95,7 @@ namespace reserva_butacas.Modules.Seat.Aplication.Services
         {
             var seats = await _seatRepository.GetAllAsync();
 
-            seats = seats.Where(x => x.Status);
+            //seats = seats.Where(x => x.Status);
 
             return _mapper.Map<IEnumerable<SeatDTO>>(seats);
         }
