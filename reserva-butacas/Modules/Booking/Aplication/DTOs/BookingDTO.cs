@@ -17,10 +17,10 @@ namespace reserva_butacas.Modules.Booking.Aplication.DTOs
         public bool Status { get; set; }
         public DateTime Date { get; set; }
         public int CustomerID { get; set; }
-        public required CustomerDTO Customer { get; set; }
+        public  CustomerDTO Customer { get; set; }
         public int SeatID { get; set; }
-        public required SeatDTO Seat { get; set; }
+        public  SeatDTO Seat { get; set; }
         public int BillboardID { get; set; }
-        public required BillboardDTO Billboard { get; set; }
+        public  BillboardDTO Billboard { get; set; }
     }
 }

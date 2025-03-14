@@ -19,16 +19,16 @@ namespace reserva_butacas.Modules.Billboard.Infrastructure.Persistence.Repositor
 
          public new async Task<IEnumerable<BillboardEntity>> GetAllAsync()
         {
-            return await _context.Billboards.Include(r => r.Movie).Include(r => r.Room).ToListAsync();
+            return await _context.Billboards.Include(r => r.Movie).Include(r => r.Room.Seats).ToListAsync();
         }
         public new async Task<BillboardEntity?> GetByIdAsync(int id)
         {
-            return await _context.Billboards.Include(r => r.Movie).Include(r => r.Room).FirstOrDefaultAsync(r => r.Id == id);
+            return await _context.Billboards.Include(r => r.Movie).Include(r => r.Room.Seats).FirstOrDefaultAsync(r => r.Id == id);
         }
 
         public new async Task<IEnumerable<BillboardEntity>> SearchAsync(Func<BillboardEntity, bool> predicate)
         {
-            return await Task.Run(() => _context.Billboards.Include(r => r.Movie).Include(r => r.Room).Where(predicate).ToList());
+            return await Task.Run(() => _context.Billboards.Include(r => r.Movie).Include(r => r.Room.Seats).Where(predicate).ToList());
         }
     }
 }

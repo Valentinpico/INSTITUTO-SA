@@ -49,7 +49,7 @@ export const TableMovie = () => {
 
   useEffect(() => {
     getAllMovies();
-  }, [getAllMovies]);
+  }, []);
   return (
     <div className="container mx-auto py-5">
       <Button

@@ -13,7 +13,7 @@ export const initialValuesCustomer: Customer = {
 };
 
 export const UserSchema = z.object({
-  id: z.number(),
+  id: z.number().min(1, "The id is required"),
   status: z.boolean(),
   name: z.string().min(1, "The name is required"),
   documentNumber: z.string().min(1, "The document number is required"),

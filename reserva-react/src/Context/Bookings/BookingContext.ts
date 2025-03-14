@@ -16,7 +16,7 @@ type EntityContextType = {
   getAllCustomers: () => void;
   getAllRooms: () => void;
   getAllMovies: () => void;
-  getAllSeats: () => void;
+  getAllSeats: () => void
   getAllBillboards: () => void;
   getAllBookings: () => void;
 };

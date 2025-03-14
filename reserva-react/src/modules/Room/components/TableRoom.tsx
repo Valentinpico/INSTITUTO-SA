@@ -48,7 +48,7 @@ export const TableRoom = () => {
 
   useEffect(() => {
     getAllRooms();
-  }, [getAllRooms]);
+  }, []);
   return (
     <div className="container mx-auto py-5">
       <Button

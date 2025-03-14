@@ -1,3 +1,4 @@
+import { SeatSchema } from "@/modules/Seat/schemas/SeatSchema"; // Ensure SeatSchema has a proper type annotation
 import { ApiResponseSchema } from "@/schemas/ApiResponseSchema";
 import { z } from "zod";
 
@@ -6,6 +7,7 @@ export const initialValuesRoom: Room = {
   status: true,
   name: "",
   number: 0,
+  seats: [],
 };
 
 export const RoomSchema = z.object({
@@ -13,6 +15,7 @@ export const RoomSchema = z.object({
   status: z.boolean(),
   name: z.string().min(1, "The name is required"),
   number: z.number().min(1, "The number is required"),
+  seats: z.array(SeatSchema), 
 });
 export type Room = z.infer<typeof RoomSchema>;
 

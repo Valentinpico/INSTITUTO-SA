@@ -10,14 +10,11 @@ export const Layout = () => {
         <section className="flex  gap-5">
           {columsNav.map((item, index) => {
             return (
-              <div
-                className="hover:bg-blue-500 p-2 rounded transition"
-                key={index}
-              >
-                <Link key={index} className="navbar-brand" to={item.path}>
+           
+                <Link key={index} className="navbar-brand hover:bg-blue-500 rounded transition hover:cursor-pointer p-2" to={item.path}>
                   {item.name}
                 </Link>
-              </div>
+             
             );
           })}
         </section>

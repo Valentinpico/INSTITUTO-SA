@@ -14,7 +14,7 @@ import { useEntityContext } from "@/Context/Entities/EntityProvider";
 
 import { MovieGenreEnumLabel } from "@/modules/Movie/utils/enums";
 
-const formatTime = (timeString: string): string => {
+export const formatTime = (timeString: string): string => {
   if (!timeString) return "N/A";
 
   const [hours, minutes] = timeString.split(":");
@@ -26,7 +26,7 @@ const formatTime = (timeString: string): string => {
   return `${hour12}:${minutes} ${ampm}`;
 };
 
-const formatDate = (dateString: string) => {
+export const formatDate = (dateString: string) => {
   if (!dateString) return "N/A";
 
   const date = new Date(dateString);

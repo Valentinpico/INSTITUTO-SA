@@ -87,7 +87,7 @@ export const FormBillboard = () => {
   useEffect(() => {
     getAllRooms();
     getAllMovies();
-  }, [getAllMovies, getAllRooms]);
+  }, []);
 
   return (
     <>

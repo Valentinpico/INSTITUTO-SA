@@ -66,7 +66,7 @@ export const TableSeat = () => {
   useEffect(() => {
     getAllSeats();
     getAllRooms();
-  }, [getAllSeats, getAllRooms]);
+  }, []);
   return (
     <div className="container mx-auto py-5">
       <div className="flex justify-between items-center">

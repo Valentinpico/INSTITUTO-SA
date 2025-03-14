@@ -8,6 +8,7 @@ import { deleteBooking_api } from "../api/booking.service";
 import { showToast } from "@/adapters/toast/handleToast";
 import { useEntityContext } from "@/Context/Entities/EntityProvider";
 import { useBookingContext } from "@/Context/Bookings/BookingProvider";
+import { FormBooking } from "./FormBooking";
 
 export const TableBooking = () => {
   const { modal, setModal, roomSelected, setBookingSelected, seatSelected } =
@@ -49,7 +50,7 @@ export const TableBooking = () => {
 
   useEffect(() => {
     getAllBookings();
-  }, [getAllBookings]);
+  }, []);
   return (
     <div className="container mx-auto py-5">
       <div className="flex justify-between items-center">
@@ -83,9 +84,9 @@ export const TableBooking = () => {
 
       <TablaDinamica columns={columns} data={allBookings} />
 
-      {/*   <ModalDefault modal={modal} setModal={setModal}>
-        <FormBooking getAllBookings={getAllBookings}  />
-      </ModalDefault> */}
+      <ModalDefault modal={modal} setModal={setModal}>
+        <FormBooking />
+      </ModalDefault>
 
       <ModalDefault modal={modalEliminar} setModal={setModalEliminar}>
         <h1 className="text-2xl font-bold">Are you sure you want to delete?</h1>

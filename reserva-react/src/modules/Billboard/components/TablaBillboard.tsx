@@ -41,7 +41,7 @@ export const TableBillboard = () => {
 
   useEffect(() => {
     getAllBillboards();
-  }, [getAllBillboards]);
+  }, []);
   return (
     <div className="container mx-auto py-5">
       <Button

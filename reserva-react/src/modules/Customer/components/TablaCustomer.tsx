@@ -50,8 +50,7 @@ export const TableCustomer = () => {
 
   useEffect(() => {
     getAllCustomers();
-  
-  }, [getAllCustomers]);
+  }, []);
   return (
     <div className="container mx-auto py-5">
       <Button

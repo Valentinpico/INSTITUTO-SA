@@ -1,15 +1,6 @@
-import {
-  BillboardSchema,
-  initialValuesBillboard,
-} from "@/modules/Billboard/schemas/BillboardSchema";
-import {
-  initialValuesCustomer,
-  UserSchema,
-} from "@/modules/Customer/schemas/CustomerSchema";
-import {
-  initialValuesSeat,
-  SeatSchema,
-} from "@/modules/Seat/schemas/SeatSchema";
+import { BillboardSchema } from "@/modules/Billboard/schemas/BillboardSchema";
+import { UserSchema } from "@/modules/Customer/schemas/CustomerSchema";
+import { SeatSchema } from "@/modules/Seat/schemas/SeatSchema";
 import { ApiResponseSchema } from "@/schemas/ApiResponseSchema";
 import { z } from "zod";
 
@@ -20,9 +11,9 @@ export const initialValuesBooking: Booking = {
   customerID: 0,
   billboardID: 0,
   seatID: 0,
-  billboard: initialValuesBillboard,
-  customer: initialValuesCustomer,
-  seat: initialValuesSeat,
+  billboard: null,
+  customer: null,
+  seat: null,
 };
 
 export const BookingSchema = z.object({
@@ -31,10 +22,10 @@ export const BookingSchema = z.object({
   date: z.string(),
   customerID: UserSchema.shape.id,
   billboardID: BillboardSchema.shape.id,
-  seatID: SeatSchema.shape.id.nullable(),
-  billboard: BillboardSchema,
-  customer: UserSchema,
-  seat: SeatSchema,
+  seatID: SeatSchema.shape.id,
+  billboard: BillboardSchema.nullable(),
+  customer: UserSchema.nullable(),
+  seat: SeatSchema.nullable(),
 });
 
 export type Booking = z.infer<typeof BookingSchema>;
