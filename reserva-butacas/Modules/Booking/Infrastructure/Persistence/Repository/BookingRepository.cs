@@ -19,6 +19,8 @@ namespace reserva_butacas.Modules.Booking.Infrastructure.Persistence.Repository
             return await _context.Bookings
                 .Include(b => b.Billboard)
                 .ThenInclude(b => b.Movie)
+                .Include(b => b.Billboard.Room)
+                .Include(b => b.Seat)
                 .Include(b => b.Customer)
                 .Where(b => b.Billboard.Movie.Genre == MovieGenreEnum.HORROR &&
                        b.Date >= startDate && b.Date <= endDate &&

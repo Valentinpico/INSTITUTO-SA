@@ -15,6 +15,7 @@ import { useEntityContext } from "@/Context/Entities/EntityProvider";
 import { MovieGenreEnumLabel } from "@/modules/Movie/utils/enums";
 import { cancelBillboard_api } from "../api/billboard.service";
 import { showToast } from "@/adapters/toast/handleToast";
+import { useBookingContext } from "@/Context/Bookings/BookingProvider";
 
 export const formatTime = (timeString: string): string => {
   if (!timeString) return "N/A";
@@ -55,11 +56,14 @@ export const BillboardCard = ({
 
   const { setModal, setBillboardSelected } = useEntityContext();
 
-  const handleDisable = async () => {
+  const { getAllBillboards } = useBookingContext();
 
+  const handleDisable = async () => {
     const res = await cancelBillboard_api(billboard.id);
 
-    showToast(res.message || "Error", res.success ? "success" : "error");
+    showToast(res.message || "Billboard disbled", "success");
+
+    getAllBillboards();
   };
 
   return (

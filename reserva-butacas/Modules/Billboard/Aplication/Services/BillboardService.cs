@@ -56,7 +56,7 @@ namespace reserva_butacas.Modules.Billboard.Aplication.Services
                 await _billboardRepository.UpdateAsync(billboard);
 
                 var bookings = await _bookingRepository.SearchAsync(b => b.BillboardID == id);
-                
+
                 if (bookings == null || !bookings.Any())
                     throw new NotFoundException($"No bookings found for Billboard with ID {id}");
 
@@ -115,7 +115,7 @@ namespace reserva_butacas.Modules.Billboard.Aplication.Services
 
             var billboardsDTO = billboards.Select(b => _mapper.Map<BillboardDTO>(b));
 
-            billboardsDTO = billboardsDTO.Where(b => b.Status == true);
+           // billboardsDTO = billboardsDTO.Where(b => b.Status == true);
 
             return billboardsDTO ?? [];
         }

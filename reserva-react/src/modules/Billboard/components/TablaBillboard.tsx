@@ -59,6 +59,7 @@ export const TableBillboard = () => {
               key={billboard.id}
               billboard={billboard}
               buttonDelete={buttonDelete}
+              home={false}
             />
           ))
         ) : (

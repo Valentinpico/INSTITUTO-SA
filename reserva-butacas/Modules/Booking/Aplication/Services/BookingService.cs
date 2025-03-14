@@ -95,7 +95,12 @@ namespace reserva_butacas.Modules.Booking.Aplication.Services
             var seat = await _seatRepository.GetByIdAsync(bookingUpdateDTO.SeatID)
                 ?? throw new NotFoundException("Seat not found");
 
-            var seatOcupied = await _bookingRepository.SearchAsync(b => b.SeatID == bookingUpdateDTO.SeatID && b.BillboardID == bookingUpdateDTO.BillboardID && b.Status);
+            var seatOcupied = await _bookingRepository.SearchAsync(
+                b => b.SeatID == bookingUpdateDTO.SeatID 
+                && b.BillboardID == bookingUpdateDTO.BillboardID 
+                && b.Id != bookingUpdateDTO.Id
+                && b.Status);
+                
 
             if (seatOcupied.Any())
                 throw new NotFoundException("Seat is already occupied");

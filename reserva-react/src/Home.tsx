@@ -53,9 +53,12 @@ export const Home = () => {
         Today's Billboards
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 p-5">
-        {billboardsToday.map((billboard) => (
-          <BillboardCard billboard={billboard} key={billboard.id} home />
-        ))}
+        {billboardsToday.map(
+          (billboard) =>
+            billboard.status && (
+              <BillboardCard billboard={billboard} key={billboard.id} home />
+            )
+        )}
       </div>
     </div>
   );

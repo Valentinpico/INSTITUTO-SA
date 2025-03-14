@@ -21,8 +21,6 @@ namespace reserva_butacas.Modules.Seat.Infrastructure.Persistence.Repository
 
             List<SeatsAvailableOccupiedDTO> result = [];
 
-            var rooms = await _context.Rooms.Where(r => r.Status).ToListAsync();
-
             var billboards = await _context.Billboards
                     .Where(b => b.Date.Date == today && b.Status).Include(b => b.Room)
                     .ToListAsync();
@@ -32,24 +30,22 @@ namespace reserva_butacas.Modules.Seat.Infrastructure.Persistence.Repository
             foreach (var billboard in billboards)
             {
                 var totalSeats = await _context.Seats
-                .Where(s => s.RoomID == billboard.RoomID && s.Status)
-                .CountAsync();
+                .Where(s => s.RoomID == billboard.RoomID && s.Status).ToListAsync();
 
+                var bookings = await _context.Bookings
+                    .Where(b => b.BillboardID == billboard.Id && b.Status)
+                    .ToListAsync();
 
-                var occupiedSeats = await _context.Bookings
-                    .Where(b => billboardIds.Contains(b.BillboardID) && b.Status && b.Seat.Status)
-                    .Select(b => b.SeatID)
-                    .Distinct()
-                    .CountAsync();
+                var occupiedSeats = bookings.Count;
 
-                var availableSeats = totalSeats - occupiedSeats;
+                var availableSeats = totalSeats.Count - occupiedSeats;
 
                 result.Add(new SeatsAvailableOccupiedDTO
                 {
                     RoomID = billboard.RoomID,
                     Available = availableSeats,
                     Occupied = occupiedSeats,
-                    Total = totalSeats,
+                    Total = totalSeats.Count,
                     Room = new RoomDTO
                     {
                         Id = billboard.Room.Id,
